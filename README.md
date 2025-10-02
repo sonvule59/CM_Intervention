@@ -1,4 +1,4 @@
-# Physical Activity Self-efficacy (PAS) Intervention 2.0
+# Confident Moves Intervention 
 
 A Django-based web application for managing a research study on physical activity interventions. This system handles participant enrollment, eligibility screening, randomization, survey distribution, and physical activity monitoring across multiple waves.
 
