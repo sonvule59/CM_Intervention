@@ -2,7 +2,7 @@
 
 A Django-based web application for managing a research study on physical activity interventions. This system handles participant enrollment, eligibility screening, randomization, survey distribution, and physical activity monitoring across multiple waves.
 
-## Quick Start for Designers
+## Quick Start for Front-End Developers/Designers
 
 **Goal**: Get the UI running locally so you can edit HTML/CSS without backend complexity.
 
@@ -13,7 +13,15 @@ A Django-based web application for managing a research study on physical activit
 git clone https://github.com/your-org/your-repo.git
 cd your-repo
 python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .\.venv\Scripts\Activate.ps1
+
+# Activate environment:
+# macOS/Linux:
+source .venv/bin/activate
+# Windows PowerShell:
+.\.venv\Scripts\Activate.ps1
+# Windows Command Prompt:
+.venv\Scripts\activate.bat
+
 pip install -r requirements.txt
 ```
 
@@ -39,8 +47,13 @@ Visit http://127.0.0.1:8000
 ### Daily Workflow
 
 ```bash
-# Activate environment
-source .venv/bin/activate  # On Windows: .\.venv\Scripts\Activate.ps1
+# Activate environment (choose your platform):
+# macOS/Linux:
+source .venv/bin/activate
+# Windows PowerShell:
+.\.venv\Scripts\Activate.ps1
+# Windows Command Prompt:
+.venv\Scripts\activate.bat
 
 # Start server
 python manage.py runserver
