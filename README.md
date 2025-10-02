@@ -14,6 +14,8 @@ git clone https://github.com/your-org/your-repo.git
 cd your-repo
 python3 -m venv .venv
 
+NOTE: DO NOT PUSH THE CODE TO THE MAIN BRANCH
+
 # Activate environment:
 # macOS/Linux:
 source .venv/bin/activate
