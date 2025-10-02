@@ -1,4 +1,5 @@
 # type: ignore
+import pydoc
 from bz2 import compress
 import logging
 from django.urls import reverse
@@ -39,6 +40,9 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
+pydoc.writedoc('testpas.views')
+
+""" Landing Page for Unauthenticated Users """
 def landing(request):
     """Landing page for unauthenticated users"""
     if request.user.is_authenticated:
@@ -47,6 +51,9 @@ def landing(request):
 
 @login_required
 def home(request):
+
+## IGNORE BELOW - OLD HOME VIEW
+#     """Home page - redirects authenticated users to dashboard"""
 
 # current_date = timezone.now().date()
 #     day_1 = current_date  # Initialize with current_date instead of 0
@@ -152,7 +159,9 @@ def home(request):
     return redirect('dashboard')
 
 
-"""Information 2: Create Account"""
+"""Information 2: Create Account
+
+Participants should be able to create an account on the website by providing their username, email, password, phone number, and correct registration code."""
 def create_account(request):
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
@@ -212,22 +221,28 @@ def create_account(request):
         form = UserRegistrationForm()
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+    # If there are no errors, user will be registered successfully
     return render(request, "create_account.html", {'form': form})
 
 """Information 3: Email Confirmation to Activate Account"""
 @csrf_exempt
+# View to handle account confirmation via email link.
 def confirm_account(request, token):
+    # Checks if the token is valid and activates the participant's account.
     participant = Participant.objects.filter(confirmation_token=token).first()
     if not participant:
         messages.error(request, "Invalid or expired confirmation token.")
         return redirect("create_account")
+    # Add debugging information to see if the code is doing what it is supposed to (for development purposes)
     print(f"[DEBUG] Participant found: {participant.participant_id}")
     print(f"[DEBUG] Participant is confirmed: {participant.is_confirmed}")
     if participant.is_confirmed:
         messages.info(request, "Account already confirmed.")
     else:
+        # Confirm the account
         participant.is_confirmed = True
         participant.save()
+        # Display success message on user screen
         messages.success(request, "Account confirmed successfully.")
     
     return redirect("questionnaire_interest")
@@ -237,12 +252,15 @@ def confirm_account(request, token):
 Once participants create an account, they should be able to reset their password on the login page if they forget it."""
 @csrf_exempt
 def login_view(request):
+    # Add debugging information for when user tries to login
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         print(f"[DEBUG] Login attempt for username: {username}")
         
+        # Authenticates the user
         user = authenticate(request, username=username, password=password)
+        # If authentication is successful, log the user in
         if user is not None:
             print(f"[DEBUG] Authentication successful for user: {user.username}")
             login(request, user)
@@ -251,11 +269,13 @@ def login_view(request):
             return redirect(next_url)
             # return redirect('dashboard')  # Redirect to the dashboard after successful login
         else:
+            # If authentication fails, show an error message
             print(f"[DEBUG] Authentication failed for username: {username}")
             messages.error(request, 'Invalid username or password.')
             return render(request, 'login.html')
     return render(request, 'login.html')
 
+""" Password Reset Functionality"""
 def password_reset(request):
     """Handle password reset request"""
     if request.method == 'POST':
@@ -277,17 +297,20 @@ def password_reset(request):
                     [email],
                     fail_silently=False,
                 )
+                # If user found and email sent
                 messages.success(request, 'Password reset email sent. Please check your email.')
                 return redirect('login')
+            # If no user found with that email
             except User.DoesNotExist:
                 messages.error(request, 'No user found with that email address.')
     else:
         form = PasswordResetForm()
-    
+    # Render the password reset page with the form
     return render(request, 'password_reset.html', {'form': form})
 
+"""Handle password reset confirmation"""
 def password_reset_confirm(request, token):
-    """Handle password reset confirmation"""
+    # Validate token sent in email (See above for email sending implementation) and allow user to set new password
     try:
         token_obj = Token.objects.get(token=token, used=False)
         user = token_obj.recipient
@@ -303,8 +326,9 @@ def password_reset_confirm(request, token):
                 return redirect('login')
         else:
             form = PasswordResetConfirmForm()
-        
+        # Render the password reset confirmation page with the form
         return render(request, 'password_reset_confirm.html', {'form': form, 'token': token})
+    # If token is invalid or expired, show error message and redirect to login
     except Token.DoesNotExist:
         messages.error(request, 'Invalid or expired reset link.')
         return redirect('login')
@@ -326,6 +350,7 @@ def create_participant(request):
         password = request.POST.get("password")
         phone_number = request.POST.get("phone_number").strip()
 
+        # Check for existing username or email
         if User.objects.filter(username=username).exists():
             return JsonResponse({"error": "Username already exists"}, status=400)
         if User.objects.filter(email=email).exists():
@@ -344,6 +369,7 @@ def questionnaire(request):
         answers = request.POST
         print(f"Full POST Data: {answers}")
 
+        # Extract answers
         age = int(answers.get("age", 0))
         height = int(answers.get("height", 0))
         weight = int(answers.get("weight", 0))
@@ -355,6 +381,7 @@ def questionnaire(request):
         print(f"Age: {age}, BMI: {bmi:.2f}, Device: {access_to_device}, No Other Study: {willing_no_other_study}")
         print(f"Monitor: {willing_monitor}, Contact: {willing_contact}")
 
+        # Determine eligibility with given answers (If user is 18-64, BMI>=25, has device, willing to not enroll in other studies, comply with monitoring, respond to contacts)
         eligible = (
             (18 <= age <= 64) and
             (bmi >= 25) and
@@ -377,12 +404,14 @@ def questionnaire(request):
             user_progress.eligible = eligible
             user_progress.save()
 
+        # Redirect to consent form or exit screen based on eligibility
         if eligible:
             return redirect("consent_form")
         else:
             return redirect(reverse("exit_screen_not_eligible"))
     return render(request, "questionnaire.html")
 
+# Sends Wave 1 Survey Ready Email
 def send_wave_1_email(user):
     subject = "Wave 1 Online Survey Set - Ready"
     message = f"""
@@ -414,20 +443,25 @@ def consent_form(request):
             logger.info(f"User {request.user.username} declined consent")
             return redirect('exit_screen_not_interested')
         
+        # Process consent form submission
         form = ConsentForm(request.POST)
         if form.is_valid():
             user = request.user
             try:
                 user_progress = UserSurveyProgress.objects.get(user=user, survey__title="Eligibility Criteria")
+                # If user is not eligible, redirect to exit screen
                 if not user_progress.eligible:
                     logger.warning(f"User {user.username} not eligible")
                     messages.error(request, "You are not eligible to participate.")
                     return redirect("exit_screen_not_eligible")
+                
+            # Handle case where UserSurveyProgress does not exist (Backend issue)
             except UserSurveyProgress.DoesNotExist:
                 logger.error(f"No UserSurveyProgress found for {user.username}")
                 messages.error(request, "No eligibility record found. Please contact support.")
                 return render(request, "consent_form.html", {"form": form})
 
+            # Create or get Participant record
             participant, created = Participant.objects.get_or_create(user=user)
             if created:
                 logger.info(f"Created Participant for {user.username}")
@@ -446,6 +480,8 @@ def consent_form(request):
             #     participant.save()
 
             # end Jun 25
+
+            # Save user progress with error handling
             try:
                 user_progress.save()
                 logger.debug(f"Saved progress for {user.username}: consent_given=True, day_1={user_progress.day_1}")
@@ -472,31 +508,34 @@ def consent_form(request):
         form = ConsentForm()
         return render(request, "consent_form.html", {'form': form})
 
-# INFORMATION 10: Exit Screen for Not Eligible
+"""INFORMATION 10: Exit Screen for Not Eligible """
 def exit_screen_not_eligible(request):
     try:
+        # Takes the user to the exit screen if they are not eligible for the study
         content = Content.objects.get(content_type='exit_screen')
         return render(request, 'exit_screen_not_eligible.html', {'content': content})
     except Content.DoesNotExist:
         return render(request, 'exit_screen_not_eligible.html')
 
 
-
+"""Handle survey views for different waves (Reused for different surveys in different waves)"""
 @login_required
 def survey_view(request, wave):
-    """Handle survey views for different waves"""
+    
     participant = get_object_or_404(Participant, user=request.user)
     
     # Check if participant is eligible for this survey
     if not participant.user.is_authenticated:
         return redirect('login')
     
+    # Determines which participant, wave, and survey title the survey is for
     context = {
         'wave': wave,
         'participant': participant,
         'survey_title': f'Wave {wave} Survey',
     }
     
+    # Display different instructions based on wave
     if wave == 1:
         context['survey_description'] = 'Wave 1 Online Survey Set - Complete this survey within 10 days to earn a $5 Amazon gift card.'
     elif wave == 2:
@@ -506,19 +545,22 @@ def survey_view(request, wave):
     else:
         context['survey_description'] = f'Wave {wave} Survey'
     
+    # Loads the survey template
     return render(request, 'survey.html', context)
 
+"""Handle daily activity log views for different waves"""
 @login_required
 def daily_log_view(request, wave):
-    """Handle daily activity log views for different waves"""
     participant = get_object_or_404(Participant, user=request.user)
     
+    # Determines which participant, wave, and log title the daily activity log is for
     context = {
         'wave': wave,
         'participant': participant,
         'log_title': f'Wave {wave} Daily Activity Log',
     }
     
+    # Display different instructions based on wave
     if wave == 1:
         context['log_description'] = 'Wave 1 Daily Activity Log - Record your physical activity for the past 7 days.'
     elif wave == 3:
@@ -526,9 +568,10 @@ def daily_log_view(request, wave):
     else:
         context['log_description'] = f'Wave {wave} Daily Activity Log'
     
+    # Loads the daily activity log template
     return render(request, 'daily_log.html', context)
 
-"""DEV TIME CONTROLS"""
+"""DEV TIME CONTROLS (For developers to skip to certain days in the study timeline)"""
 @login_required
 def dev_time_controls(request):
     # if not request.user.is_staff:
@@ -540,6 +583,7 @@ def dev_time_controls(request):
         return JsonResponse({'status': 'success', 'fake_time': _fake_time.isoformat()})
     return render(request, 'dev_time_controls.html')
 
+""" User Dashboard """
 @login_required
 def dashboard(request):
     # Add debugging information
@@ -547,17 +591,19 @@ def dashboard(request):
     print(f"[DEBUG] User ID: {request.user.id}")
     print(f"[DEBUG] User is authenticated: {request.user.is_authenticated}")
     
+    # Retrieve user progress and participant info
     user_progress = UserSurveyProgress.objects.filter(user=request.user, survey__title="Eligibility Criteria").first()
     participant = Participant.objects.filter(user=request.user).first()
     progress_percentage = 0  # Default if not eligible or study_day not set
-    # Add more debugging
+    
+    # Add more debugging (for development purposes)
     if participant:
         print(f"[DEBUG] Participant found: {participant.participant_id}")
         print(f"[DEBUG] Participant user: {participant.user.username}")
     else:
         print(f"[DEBUG] No participant found for user {request.user.username}")
     
-    # Add enrollment status debugging
+    # Add enrollment status debugging (for development purposes)
     if user_progress:
         print(f"[DEBUG] User progress found:")
         print(f"[DEBUG] - Eligible: {user_progress.eligible}")
@@ -566,6 +612,7 @@ def dashboard(request):
     else:
         print(f"[DEBUG] No user progress found for user {request.user.username}")
     
+    # Initialize values necessary for dashboard calculations
     current_date = get_current_time().date()
     within_wave1_period = False
     within_wave3_period = False
@@ -629,7 +676,8 @@ def dashboard(request):
                 days_until_end_wave1 = max(0, (day_21 - current_date).days)
                 days_until_start_wave3 = max(0, (day_95 - current_date).days)
                 days_until_end_wave3 = max(0, (day_104 - current_date).days)
-                
+
+            # Add debugging for milestone dates (for development purposes)    
             print(f"[DEBUG] Day 11: {day_11}")
             print(f"[DEBUG] Day 21: {day_21}")
             print(f"[DEBUG] Day 95: {day_95}")
@@ -659,6 +707,7 @@ def dashboard(request):
                 start_date_wave3 = day_95
                 end_date_wave3 = day_104
 
+    # Prepare content for template rendering (what information will be shown on the dashboard screen)
     context = {
         'user': request.user,  # Explicitly pass the current user
         'progress': user_progress,
@@ -679,8 +728,10 @@ def dashboard(request):
         'time_compression': settings.TIME_COMPRESSION,  # Add this for template debugging
         'intervention_points': participant.intervention_points if participant else 0,  # Add intervention points
     }
+    # Loads the dashboard template with context
     return render(request, "dashboard.html", context)
-# INFORMATION 11 & 22: Enter Code
+
+""" INFORMATION 11 & 22: Enter Code """
 @login_required
 def enter_code(request, wave):
     """Handle code entry for Wave 1 or Wave 3"""
@@ -711,6 +762,7 @@ def enter_code(request, wave):
     print(f"[DEBUG] Time compression: {settings.TIME_COMPRESSION}")
     print(f"[DEBUG] Seconds per day: {settings.SECONDS_PER_DAY}")
     
+    #If the current wave is 1
     if wave == 1:
         # Check if within Wave 1 window (Days 11-20)
         print(f"[DEBUG] Wave 1 check: 11 <= {study_day} <= 20 = {11 <= study_day <= 20}")
@@ -720,7 +772,8 @@ def enter_code(request, wave):
         if participant.code_entered:
             messages.info(request, "You have already entered the code for Wave 1.")
             return redirect('home')
-            
+        
+    # If the current wave is 3        
     elif wave == 3:
         # Check if within Wave 3 window (Days 95-104)
         print(f"[DEBUG] Wave 3 check: 95 <= {study_day} <= 104 = {95 <= study_day <= 104}")
@@ -736,8 +789,9 @@ def enter_code(request, wave):
         if form.is_valid():
             code = form.cleaned_data['code'].strip().lower()
             
-            # if code == settings.REGISTRATION_CODE.lower():
+            # if code == settings.REGISTRATION_CODE.lower(), in this case 'wavepa':
             if code == 'wavepa':
+                # If during Wave 1 code entry period
                 if wave == 1:
                     # Jun 25: Add in store timeline day instead of date 
                     participant.code_entered = True
@@ -767,7 +821,8 @@ def enter_code(request, wave):
                     
                     # Send Information 12 email
                     # send_wave1_code_entry_email.delay(participant.id)
-                    
+                
+                # If during Wave 3 code entry period
                 elif wave == 3:
                     participant.wave3_code_entered = True
                     participant.wave3_code_entry_date = timezone.now().date()
@@ -806,6 +861,7 @@ def enter_code(request, wave):
     }
     return render(request, 'monitoring/enter_code.html', context)
 
+""" Download Participant Data for Dr. Lee to export as CSV """
 def download_data(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="pas_data.csv"'
@@ -829,6 +885,7 @@ def download_data(request):
         ])
     return response
 
+""" Checks if the code entry was successful and shows success page """
 def code_success(request, wave):
     # return render(request, 'code_success.html', {'wave': wave})
     participant = Participant.objects.get(user=request.user)
@@ -837,6 +894,7 @@ def code_success(request, wave):
     days_remaining = (day_21 - current_date).days
     return render(request, 'code_success.html', {'days_remaining': days_remaining})
 
+""" Checks if the code entry failed and shows failure page """
 def code_failure(request):
     participant = Participant.objects.get(user=request.user)
     current_date = timezone.now().date()
@@ -844,9 +902,12 @@ def code_failure(request):
     days_remaining = (day_21 - current_date).days
     return render(request, 'code_failure.html', {'days_remaining': days_remaining})
 
+""" Exit Screen for Users that are not interested in participating """
 def exit_screen_not_interested(request):
     if request.method == 'GET':
         return render(request, 'exit_screen_not_interested.html')
+
+""" Handles the waiting screen display """
 def waiting_screen(request):
     try:
         content = Content.objects.get(content_type='waiting_screen')
@@ -854,6 +915,7 @@ def waiting_screen(request):
     except Content.DoesNotExist:
         return render(request, "waiting_screen.html")
 
+""" Displays logout view and clears session data when user logs out """
 def logout_view(request):
     print(f"[DEBUG] Logging out user: {request.user.username}")
     logout(request)
