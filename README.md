@@ -38,15 +38,9 @@ pip install -r requirements.txt
 ```
 
 4) **Create a local env file**
-- Copy `.env.example` to `.env`
-- Fill in values as shown below. Do not commit .env.
-
-If `.env.example` doesn't exist yet, create both files like this:
-
-**Add `.env.example` to the repo (safe to commit)**
-- This is a template. Do not put secrets here.
-
-```
+First, create the `.env.example` template file (safe to commit):
+```bash
+cat > .env.example << 'EOF'
 # Core
 SECRET_KEY=REPLACE_ME
 DEBUG=True
@@ -69,16 +63,22 @@ EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 
 # Celery/Redis (optional)
 # REDIS_URL=redis://localhost:6379/0
+EOF
 ```
 
-**Create your private `.env` (do NOT commit)**
-- Use a real Django secret key:
-  ```bash
-  python -c "import secrets; print(secrets.token_urlsafe(50))"
-  ```
-- Paste into `.env`:
+Then create your private `.env` file (do NOT commit):
+```bash
+# Generate a real Django secret key
+python -c "import secrets; print(secrets.token_urlsafe(50))"
+
+# Copy the template and edit with your secret key
+cp .env.example .env
+# Edit .env and replace REPLACE_ME with your generated secret key
 ```
-SECRET_KEY=PASTE_GENERATED_SECRET_HERE
+
+Your `.env` should look like:
+```
+SECRET_KEY=your_generated_secret_key_here
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
 BASE_URL=http://127.0.0.1:8000
@@ -90,23 +90,30 @@ EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 
 5) **Initialize the database**
 ```bash
+python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
 ```
-Optional seed content:
+
+6) **Collect static files (if needed)**
+```bash
+python manage.py collectstatic
+```
+
+7) **Optional: Seed content**
 ```bash
 python manage.py seed_content
 python manage.py seed_email_template
 python manage.py seed_eligibility_survey
 ```
 
-6) **Run the app**
+8) **Run the app**
 ```bash
 python manage.py runserver
 ```
 Visit http://127.0.0.1:8000
 
-7) **(Optional) Run background jobs**
+9) **(Optional) Run background jobs**
 If you need emails or scheduled tasks locally:
 ```bash
 # Start Redis (if using Redis)
