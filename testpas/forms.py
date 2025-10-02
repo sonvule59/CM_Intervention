@@ -4,6 +4,8 @@ from .models import Participant
 from django.contrib.auth.forms import UserCreationForm
 
 class UserRegistrationForm(forms.Form):
+    """ Stores the user registration form infortmation that the user enters. Includes functions that validate the code entered, checks if the passwords match, 
+    cleans the information if the code is not correct, passwords do not match, etc. """
     username = forms.CharField(max_length=150, required=True, label="Username")
     email = forms.EmailField(required=True, label="Email Address")
     password = forms.CharField(widget=forms.PasswordInput, required=True, label="Password")
@@ -108,6 +110,7 @@ class UserRegistrationForm(forms.Form):
 #             user.save()
 #         return user
 class InterestForm(forms.Form):
+    """ Stores the information in the interest form that the user enters. Clears the information if the user does not give a reason they are not interested. """
     interested = forms.ChoiceField(
         choices=[('yes', 'Interested'), ('no', 'Not Interested')],
         widget=forms.RadioSelect,
@@ -130,6 +133,7 @@ class InterestForm(forms.Form):
         return cleaned_data
 # testpas/forms.py (partial)
 class EligibilityForm(forms.ModelForm):
+    """ Stores user responses to the elgibility form. Clears information for user to try again if they do not fill out the form correctly """
     age = forms.ChoiceField(
         choices=[('lt18', 'Less than 18')] + [(i, str(i)) for i in range(18, 65)] + [('gt64', 'More than 64')],
         label="What is your age?"
@@ -199,19 +203,24 @@ class EligibilityForm(forms.ModelForm):
         return self.cleaned_data['agrees_contact'] == 'yes'
     
 class CodeEntryForm(forms.Form):
+    """ Stores the code that the user entered """
     code = forms.CharField(label='Enter Code', max_length=100)
 
 class UserLoginForm(forms.Form):
+    """ Stores the infromation the user puts in to the login page so it can be verified with the set username and password """
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
 
 class ConsentForm(forms.Form):
+    """ Stores if the user consented in the consent form or not """
     consent = forms.BooleanField(label="I consent to participate in this study", required=True)
 
 class PasswordResetForm(forms.Form):
+    """ Stores the email the user enters to send the reset password email to """
     email = forms.EmailField(label="Email Address", required=True)
 
 class PasswordResetConfirmForm(forms.Form):
+    """ Stores the user response to the reset password page so the passwords can be validated as the same to officially change a password. Cleans responses if passwords do not match. """
     password = forms.CharField(widget=forms.PasswordInput, label="New Password", required=True)
     password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm New Password", required=True)
     

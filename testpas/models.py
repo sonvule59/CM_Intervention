@@ -13,6 +13,7 @@ from django.conf import settings
 from testpas import settings
 
 class Survey(models.Model):
+    """ Defines a survey so when one is created in the code, each survey has the attributes: title, description, and the date created """
     title = models.CharField(max_length=255)
     description = models.TextField()
     # created_at = models.DateTimeField(auto_now_add=True)
@@ -21,6 +22,7 @@ class Survey(models.Model):
         return self.title
 
 class Question(models.Model):
+    """ Defines a question in a survey based on the survey key (id), and stores the question text and date created """
     survey = models.ForeignKey(Survey, related_name='questions', on_delete=models.CASCADE)
     question_text = models.CharField(max_length=255)
     # created_at = models.DateTimeField(auto_now_add=True)
@@ -30,6 +32,7 @@ class Question(models.Model):
         return self.question_text
 
 class CustomUser(AbstractUser):
+    """ A custom user that an admin can make with permissions and attributes that the admin can control """
     middle_name = models.CharField(max_length=30, null=True, blank=True)
     registration_code = models.CharField(max_length=15, null=True, blank=True)
     consented = models.BooleanField(null=True, blank=True)
@@ -49,6 +52,7 @@ class CustomUser(AbstractUser):
         help_text="Specific permissions for this user.",
     )
 class Response(models.Model):
+    """ Records the user that made the response, the question, and the answer they gave to the question """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.CharField(max_length=255)
@@ -57,12 +61,14 @@ class Response(models.Model):
     def __str__(self):
         return f"{self.user} - {self.question}"
 class EmailTemplate(models.Model):
+    """ Defines an email template with its name, subject, and body so it is easy to create an email to send no matter what it is for """
     name = models.CharField(max_length=100, unique=True)
     subject = models.CharField(max_length=255)
     body = models.TextField(help_text="Use {participant_id} as placeholder.")
     def __str__(self):
         return self.name
 class UserSurveyProgress(models.Model):
+    """ Records the progress of a user. This connects the users with the status of their start and end times, progress, first day, elgibility, etc. """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     start_time = models.DateTimeField(default=timezone.now)
@@ -90,9 +96,12 @@ class UserSurveyProgress(models.Model):
         return self.user.username
     
 def generate_confirmation_token():
+    """ Function for generating the token (or code) that gives every user a unique token that is used to confirm their account """
     return uuid.uuid4().hex
 
 class Participant(models.Model):
+    """ Defines a participant so when one is created, all of the important information about a participant is recorded (i.e user, age, phase, group, phone number, start date, etc.) also
+    includes functions,, one for each of the different emails that the participant recieves over the course of the study."""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
     age = models.IntegerField(null=True, blank=True)
@@ -143,6 +152,7 @@ class Participant(models.Model):
     challenge_25_completed = models.BooleanField(default=False)
     challenge_25_completion_date = models.DateTimeField(null=True, blank=True)
     
+    # Saves participant information
     def save(self, *args, **kwargs):
         if not self.confirmation_token:
             self.confirmation_token = uuid.uuid4().hex
@@ -150,6 +160,7 @@ class Participant(models.Model):
                 self.confirmation_token = uuid.uuid4().hex
         super().save(*args, **kwargs)
 
+    # Sends email to the participant
     def send_email(self, template_name, extra_context=None, mark_as=None):
             template = EmailTemplate.objects.get(name=template_name)
             context = {'participant_id': self.participant_id, 'username': self.user.username}
@@ -181,7 +192,7 @@ class Participant(models.Model):
                 self.email_status = 'failed'
                 self.save()
                 raise
-
+    # Sends a confirmation email to the participant
     def send_confirmation_email(self):
         confirmation_link = f"{settings.BASE_URL}/confirm-account/{self.confirmation_token}/"
         self.send_email(
@@ -306,6 +317,7 @@ class ParticipantEntry(models.Model):
         return self.participant_id
 
 class EmailContent(models.Model):
+    """ Stores the email contents """
     subject = models.CharField(max_length=255)
     body = models.TextField()
 
@@ -313,6 +325,7 @@ class EmailContent(models.Model):
         return self.subject
 
 class MessageContent(models.Model):
+    """ Stores the message contents that are shown on screen """
     subject = models.CharField(max_length=255)
     body = models.TextField()
     sms_body = models.TextField()
@@ -321,6 +334,7 @@ class MessageContent(models.Model):
         return self.subject
     
 class Challenge(models.Model):
+    """ Stores user progress in a challenge """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField()
     code = models.CharField(max_length=255, null=True, blank=True)  # For challenges requiring a code
@@ -329,6 +343,7 @@ class Challenge(models.Model):
     completed = models.BooleanField(default=False)
 
 class SurveyProgress(models.Model):
+    """ Stores user progress in a survey """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     interest_submitted = models.BooleanField(default=False)
     interested = models.BooleanField(null=True, blank=True)
@@ -343,6 +358,7 @@ class SurveyProgress(models.Model):
         return f"SurveyProgress for {self.user.username}"
     
 class Token(models.Model):
+    """ Stores token values, the user it is sent to, the date it was created, and if it was used by the user """
     recipient = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -379,7 +395,7 @@ class Content(models.Model):
     def __str__(self):
         return f"{self.get_content_type_display()} - {self.title}"
 
-
+""" The following classes are for storing responses to challenges from users and participants as well as when they created or update their responses. """
 
 class Challenge5Response(models.Model):
     """Stores responses to Introductory Challenge 5 (Self-efficacy, 7 items, 0-4)."""
