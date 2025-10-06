@@ -1528,6 +1528,7 @@ def intervention_access_test(request):
             'intervention_login_count': participant.intervention_login_count,
             'progress_percent': progress_percent,
             'remaining_challenges': remaining_challenges,
+            'is_test': True,
         }
         
         return render(request, 'intervention_access.html', context)
