@@ -31,12 +31,14 @@
             <div class="access-status" style="margin-bottom: 1rem;">
                 <p><strong>Status:</strong> {{ access_message }}</p>
                 <p><strong>Study Day:</strong> {{ study_day }}</p>
-                {% if is_test %}
-                    <p><strong>Group:</strong> Test Mode (All users)</p>
-                {% elif participant.randomized_group == 1 %}
-                    <p><strong>Group:</strong> Intervention Group</p>
-                {% elif participant.randomized_group == 0 %}
-                    <p><strong>Group:</strong> Control Group</p>
+                {% if request.user.is_staff %}
+                    {% if participant.randomized_group == 1 %}
+                        <p><strong>Group:</strong> Intervention Group</p>
+                    {% elif participant.randomized_group == 0 %}
+                        <p><strong>Group:</strong> Control Group</p>
+                    {% else %}
+                        <p><strong>Group:</strong> Not Assigned</p>
+                    {% endif %}
                 {% endif %}
             </div>
             

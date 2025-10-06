@@ -326,12 +326,14 @@
                 </div>
             </div>
 
-            <!-- Test Intervention Access Button -->
+            <!-- Intervention Access Buttons -->
             <div class="card">
                 <div class="alert alert-info">
-                    <h3>🧪 Test Intervention Access</h3>
-                    <!-- <p>Access all intervention challenges for testing purposes. This bypasses study day restrictions.</p> -->
-                    <a href="{% url 'intervention_access_test' %}" class="btn btn-primary btn-large">Test Intervention Access</a>
+                    <h3>🎯 Intervention</h3>
+                    <a href="{% url 'intervention_access' %}" class="btn btn-primary btn-large">Open Intervention</a>
+                    {% if show_test_intervention_button and request.user.is_staff %}
+                        <a href="{% url 'intervention_access_test' %}" class="btn btn-primary btn-large">Open Test Intervention</a>
+                    {% endif %}
                 </div>
             </div>
 

@@ -678,6 +678,7 @@ def dashboard(request):
         'progress_percentage': progress_percentage,
         'time_compression': settings.TIME_COMPRESSION,  # Add this for template debugging
         'intervention_points': participant.intervention_points if participant else 0,  # Add intervention points
+        'show_test_intervention_button': settings.TEST_MODE
     }
     return render(request, "dashboard.html", context)
 # INFORMATION 11 & 22: Enter Code
@@ -1497,7 +1498,7 @@ def update_intervention_points(request):
 
 @login_required
 def intervention_access_test(request):
-    """Test version of intervention access that bypasses study day restrictions."""
+    """Test Intervention Access: bypass study-day and group gating for developer testing."""
     try:
         participant = Participant.objects.get(user=request.user)
         user_progress = UserSurveyProgress.objects.filter(user=request.user, survey__title="Eligibility Criteria").first()
@@ -1509,18 +1510,15 @@ def intervention_access_test(request):
         has_access = True
         access_message = "TEST MODE: Intervention access granted for testing purposes."
         
-        # Count completed challenges using the new tracking system
         from .models import ChallengeCompletion
         challenges_completed = ChallengeCompletion.objects.filter(user=request.user).count()
-        total_challenges = 35  # Total number of challenges (1-35)
-        
-        # Calculate progress percentage
+        total_challenges = 35
         progress_percent = (challenges_completed / total_challenges) * 100 if total_challenges > 0 else 0
         remaining_challenges = total_challenges - challenges_completed
         
         context = {
             'participant': participant,
-            'study_day': 50,  # Fake study day for testing
+            'study_day': 50,
             'has_access': has_access,
             'access_message': access_message,
             'challenges_completed': challenges_completed,
@@ -1528,7 +1526,6 @@ def intervention_access_test(request):
             'intervention_login_count': participant.intervention_login_count,
             'progress_percent': progress_percent,
             'remaining_challenges': remaining_challenges,
-            'is_test': True,
         }
         
         return render(request, 'intervention_access.html', context)

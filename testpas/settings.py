@@ -114,8 +114,8 @@ TIME_ZONE = 'America/Chicago'
 # Celery settings
 
 # Testing Configuration
-# TEST_MODE = os.getenv('TEST_MODE')
-TEST_MODE=True
+# Enable test mode via env var: TEST_MODE=true|1|yes
+TEST_MODE = str(os.getenv('TEST_MODE', 'false')).lower() in ('1', 'true', 'yes')
 TIME_COMPRESSION = True
 SECONDS_PER_DAY = 10 # Use 86400 for real-world days
 # TEST_TIME_SCALE = 10  # 1 day = 10 seconds for testing
