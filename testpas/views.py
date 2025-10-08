@@ -200,8 +200,8 @@ def password_reset(request):
                 # Send reset email
                 reset_link = f"{settings.BASE_URL}/password-reset-confirm/{token}/"
                 send_mail(
-                    'Password Reset Request',
-                    f'Click the following link to reset your password: {reset_link}\n\nIf you did not request this, please ignore this email.',
+                    'Password Reset Request - Confident Moves Intervention',
+                    f'Click the following link to reset your password: {reset_link}\n\nIf you did not request this, please ignore this email.\n\nBest regards,\nThe Confident Moves Research Team',
                     settings.DEFAULT_FROM_EMAIL,
                     [email],
                     fail_silently=False,
