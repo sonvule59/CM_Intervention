@@ -68,6 +68,12 @@ def create_account(request):
                     user=user,
                     email=user.email,
                     phone_number=form.cleaned_data['phone_number'],
+                    full_name=form.cleaned_data['full_name'],
+                    address_line1=form.cleaned_data['address_line1'],
+                    address_line2=form.cleaned_data.get('address_line2', ''),
+                    city=form.cleaned_data['city'],
+                    state=form.cleaned_data['state'],
+                    zip_code=form.cleaned_data['zip_code'],
                     confirmation_token=str(uuid.uuid4()),
                     participant_id=f"P{Participant.objects.count():03d}",
                     enrollment_date=timezone.now().date(),
@@ -159,9 +165,34 @@ def password_reset(request):
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            try:
-                user = User.objects.get(email=email)
+            identifier = form.cleaned_data['identifier'].strip()
+            
+            # Try to find user by email first, then by participant ID
+            user = None
+            email = None
+            
+            # Check if it looks like an email
+            if '@' in identifier:
+                try:
+                    user = User.objects.get(email=identifier)
+                    email = identifier
+                except User.DoesNotExist:
+                    pass
+                except User.MultipleObjectsReturned:
+                    # If multiple users with same email, take the first one
+                    user = User.objects.filter(email=identifier).first()
+                    email = identifier
+            
+            # If not found by email, try participant ID
+            if not user:
+                try:
+                    participant = Participant.objects.get(participant_id=identifier)
+                    user = participant.user
+                    email = user.email
+                except Participant.DoesNotExist:
+                    pass
+            
+            if user and email:
                 # Generate reset token
                 token = Token.generate_token()
                 Token.objects.create(recipient=user, token=token)
@@ -177,8 +208,8 @@ def password_reset(request):
                 )
                 messages.success(request, 'Password reset email sent. Please check your email.')
                 return redirect('login')
-            except User.DoesNotExist:
-                messages.error(request, 'No user found with that email address.')
+            else:
+                messages.error(request, 'No user found with that email address or participant ID.')
     else:
         form = PasswordResetForm()
     

@@ -104,6 +104,12 @@ class Participant(models.Model):
     email_send_date = models.DateField(null=True, blank=True)  # store email send date
     email_status = models.CharField(max_length=50, default='pending')
     phone_number = models.CharField(max_length=15, null=True, blank=True)
+    full_name = models.CharField(max_length=255, null=True, blank=True)
+    address_line1 = models.CharField(max_length=255, null=True, blank=True)
+    address_line2 = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=50, null=True, blank=True)
+    zip_code = models.CharField(max_length=10, null=True, blank=True)
     confirmation_token = models.CharField(max_length=255, unique=True)
     is_confirmed = models.BooleanField(default=False)
     token_expiration = models.DateTimeField(default=timezone.now)

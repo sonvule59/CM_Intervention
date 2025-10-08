@@ -9,10 +9,13 @@ class UserRegistrationForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, required=True, label="Password")
     password_confirm = forms.CharField(widget=forms.PasswordInput, required=True, label="Confirm Password")
     phone_number = forms.CharField(max_length=15, required=True, label="Phone Number")
-    ## Added 08/13/2025, for testing purposes
     registration_code = forms.CharField(max_length=50, required=True, label="Registration Code")
     full_name = forms.CharField(max_length=255, required=True, label="Full Name")
-    ##end of testing
+    address_line1 = forms.CharField(max_length=255, required=True, label="Address Line 1")
+    address_line2 = forms.CharField(max_length=255, required=False, label="Address Line 2 (Optional)")
+    city = forms.CharField(max_length=100, required=True, label="City")
+    state = forms.CharField(max_length=50, required=True, label="State")
+    zip_code = forms.CharField(max_length=10, required=True, label="ZIP Code")
     # Validate unique username
     def clean_username(self):
         username = self.cleaned_data['username'].strip()
@@ -34,7 +37,7 @@ class UserRegistrationForm(forms.Form):
         #     raise forms.ValidationError("This email is already in use.")
         return email
 
-    # Validate registration code, added 08/13/2025, for testing purposes
+    # Validate registration code
     def clean_registration_code(self):
         code = self.cleaned_data.get('registration_code', '').strip().lower()
         if code != 'wavepa':
@@ -209,7 +212,11 @@ class ConsentForm(forms.Form):
     consent = forms.BooleanField(label="I consent to participate in this study", required=True)
 
 class PasswordResetForm(forms.Form):
-    email = forms.EmailField(label="Email Address", required=True)
+    identifier = forms.CharField(
+        label="Email Address or Participant ID", 
+        required=True,
+        help_text="Enter your email address or participant ID (e.g., P0001)"
+    )
 
 class PasswordResetConfirmForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label="New Password", required=True)
