@@ -7,7 +7,7 @@ EMAIL_TEMPLATES = [
         "name": "account_confirmation",
         "subject": "Confirm Your PAS 2.0 Account",
         # "body": "Dear {participant_id},\n\nPlease confirm your email by clicking the following link:\n{confirmation_link}\n\nThank you,\nPAS 2.0 Team"
-        "body": "Dear {username},\n\nPlease confirm your email by clicking the following link:\n{confirmation_link}\n\nThank you,\nPAS 2.0 Team"
+        "body": "Dear {username},\n\nPlease confirm your email by clicking the following link:\n{confirmation_link}\n\nThank you,\nThe Confident Moves Research Team"
     },
     {
         "name": "wave1_survey_ready",

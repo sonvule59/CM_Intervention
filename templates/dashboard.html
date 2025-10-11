@@ -315,9 +315,9 @@
                     <div class="status-item">
                         <h4>Progress</h4>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: {{ progress_percentage|default:0 }}%;"></div>
+                            <div class="progress-fill" style="width: {{ progress_percentage|default:"0" }}%;"></div>
                         </div>
-                        <p>{{ progress_percentage|default:0 }}% Complete</p>
+                        <p>{{ progress_percentage|default:"0" }}% Complete</p>
                     </div>
                     <div class="status-item">
                         <h4>Participant ID</h4>

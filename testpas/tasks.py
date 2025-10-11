@@ -109,8 +109,12 @@ def daily_timeline_check(user):
     # On Day 29, randomize participants into Group 0 (control) or Group 1 (intervention) if not already randomized.
     if today and 29 <= today <= 30 and participant.randomized_group is None:
         import random
-        participant.randomized_group = random.choice([0, 1])
+        group = random.choice([0, 1])
+        participant.randomized_group = group
+        participant.group = group  # Also set the group field for consistency
+        participant.group_assigned = True  # Mark as assigned
         participant.save()
+        print(f"[RANDOMIZE] User {user.id} assigned to Group {group}")
 
         if participant.randomized_group == 0:
             participant.send_email("intervention_access_later", extra_context={

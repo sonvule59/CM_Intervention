@@ -17,10 +17,12 @@ class Command(BaseCommand):
 
         # if self.is_test_time() or (self.is_day_29() and now.hour == 7):
         if self.is_test_time() or (self.is_day_29()):
-            participants = Participant.objects.filter(group_assigned=False)[:5]  # Limit to first 20 for testing
+            participants = Participant.objects.filter(group_assigned=False)  # Process all unassigned participants
             print(f"Randomizing {len(participants)} participants...")
             for participant in participants:
-                participant.group = random.choice([0, 1])  # 0 for control, 1 for intervention
+                group = random.choice([0, 1])  # 0 for control, 1 for intervention
+                participant.group = group
+                participant.randomized_group = group  # Also set the field used by intervention access
                 participant.group_assigned = True
                 if participant.group == 1:
                     participant.intervention_start_date = now
