@@ -280,16 +280,21 @@ def questionnaire(request):
         willing_no_other_study = answers.get("not_enroll_other", "").strip().lower() == "yes"
         willing_monitor = answers.get("comply_monitoring", "").strip().lower() == "yes"
         willing_contact = answers.get("respond_contacts", "").strip().lower() == "yes"
+        dominant_hand = answers.get("dominant_hand", "").strip().lower()
+        
         bmi = (weight / (height ** 2)) * 703 if height > 0 else 0
         print(f"Age: {age}, BMI: {bmi:.2f}, Device: {access_to_device}, No Other Study: {willing_no_other_study}")
-        print(f"Monitor: {willing_monitor}, Contact: {willing_contact}")
+        print(f"Monitor: {willing_monitor}, Contact: {willing_contact}, Dominant Hand: {dominant_hand}")
+
+        # Eligibility logic: must agree to monitoring AND provide dominant hand if they agreed
+        monitor_eligible = willing_monitor and (dominant_hand in ['left', 'right'] if willing_monitor else True)
 
         eligible = (
             (18 <= age <= 64) and
             (bmi >= 25) and
             access_to_device and
             willing_no_other_study and
-            willing_monitor and
+            monitor_eligible and
             willing_contact
         )
         print(f"Eligibility Result: {eligible}")
@@ -297,6 +302,15 @@ def questionnaire(request):
         survey = Survey.objects.first()
         if not survey:
             return JsonResponse({"error": "No survey available. Contact support."}, status=500)
+        
+        # Save participant information including dominant hand
+        try:
+            participant = Participant.objects.get(user=user)
+            participant.dominant_hand = dominant_hand if dominant_hand in ['left', 'right'] else None
+            participant.save()
+        except Participant.DoesNotExist:
+            pass  # Participant will be created later in the flow
+        
         user_progress, created = UserSurveyProgress.objects.get_or_create(
             user=user,
             survey=survey,

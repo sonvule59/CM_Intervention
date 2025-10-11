@@ -220,9 +220,16 @@
                 <input type="radio" name="not_enroll_other" value="yes" required> Yes<br>
                 <input type="radio" name="not_enroll_other" value="no" required> No<br><br>
 
-                <label>6. Do you agree to comply with instructions for physical activity monitoring in this study?</label><br>
-                <input type="radio" name="comply_monitoring" value="yes" required> Yes<br>
-                <input type="radio" name="comply_monitoring" value="no" required> No<br><br>
+                <label>6-1. You will be asked to wear a physical activity monitor (like a watch) on your non-dominant wrist for a total of 2 weeks. This includes 1 week at the beginning of the study and another week at the end. The monitor will be mailed to your address, and you will return it to us via mail after each wear period.<br><br>
+                Do you agree to comply with instructions for physical activity monitoring in this study?</label><br>
+                <input type="radio" name="comply_monitoring" value="yes" required onchange="toggleDominantHand()"> Yes<br>
+                <input type="radio" name="comply_monitoring" value="no" required onchange="toggleDominantHand()"> No<br><br>
+
+                <div id="dominant-hand-section" style="display: none;">
+                    <label>6-2. Which is your non-dominant hand (the hand you use less often)?</label><br>
+                    <input type="radio" name="dominant_hand" value="left"> My non-dominant hand is left.<br>
+                    <input type="radio" name="dominant_hand" value="right"> My non-dominant hand is right.<br><br>
+                </div>
 
                 <label>7. Do you agree to respond to our contacts during the study?</label><br>
                 <input type="radio" name="respond_contacts" value="yes" required> Yes<br>
@@ -236,5 +243,32 @@
     <footer>
         <p>&copy; Confident Moves Intervention. All rights reserved.</p>
     </footer>
+
+    <script>
+        function toggleDominantHand() {
+            const monitoringYes = document.querySelector('input[name="comply_monitoring"][value="yes"]');
+            const dominantHandSection = document.getElementById('dominant-hand-section');
+            
+            if (monitoringYes.checked) {
+                dominantHandSection.style.display = 'block';
+                // Make dominant hand selection required when shown
+                const dominantHandInputs = document.querySelectorAll('input[name="dominant_hand"]');
+                dominantHandInputs.forEach(input => input.required = true);
+            } else {
+                dominantHandSection.style.display = 'none';
+                // Remove required attribute when hidden
+                const dominantHandInputs = document.querySelectorAll('input[name="dominant_hand"]');
+                dominantHandInputs.forEach(input => {
+                    input.required = false;
+                    input.checked = false;
+                });
+            }
+        }
+
+        // Initialize the form state on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDominantHand();
+        });
+    </script>
 </body>
 </html>

@@ -165,11 +165,17 @@ class EligibilityForm(forms.ModelForm):
         widget=forms.RadioSelect,
         label="Do you agree to respond to study-related contacts?"
     )
+    dominant_hand = forms.ChoiceField(
+        choices=[('left', 'My non-dominant hand is left'), ('right', 'My non-dominant hand is right')],
+        widget=forms.RadioSelect,
+        label="Which is your non-dominant hand (the hand you use less often)?",
+        required=False
+    )
 
     class Meta:
         model = Participant
         fields = ['age', 'height_inches', 'weight_lbs', 'has_device_access',
-                  'agrees_no_other_study', 'agrees_monitoring', 'agrees_contact']
+                  'agrees_no_other_study', 'agrees_monitoring', 'agrees_contact', 'dominant_hand']
 
     def clean_age(self):
         age = self.cleaned_data['age']
