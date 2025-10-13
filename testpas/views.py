@@ -471,17 +471,17 @@ def daily_log_view(request, wave):
     
     return render(request, 'daily_log.html', context)
 
-"""DEV TIME CONTROLS"""
-@login_required
-def dev_time_controls(request):
-    # if not request.user.is_staff:
-    #     return HttpResponse("Unauthorized", status=403)
-    global _fake_time
-    if request.method == 'POST':
-        days = int(request.POST.get('days', 0))
-        _fake_time = timezone.now() + timedelta(days=days)
-        return JsonResponse({'status': 'success', 'fake_time': _fake_time.isoformat()})
-    return render(request, 'dev_time_controls.html')
+# """DEV TIME CONTROLS"""
+# @login_required
+# def dev_time_controls(request):
+#     # if not request.user.is_staff:
+#     #     return HttpResponse("Unauthorized", status=403)
+#     global _fake_time
+#     if request.method == 'POST':
+#         days = int(request.POST.get('days', 0))
+#         _fake_time = timezone.now() + timedelta(days=days)
+#         return JsonResponse({'status': 'success', 'fake_time': _fake_time.isoformat()})
+#     return render(request, 'dev_time_controls.html')
 
 @login_required
 def dashboard(request):
