@@ -12,7 +12,7 @@ EMAIL_TEMPLATES = [
     {
         "name": "wave1_survey_ready",
         "subject": "Wave 1 Online Survey Set – Ready",
-        "body": "Hi {username},\n\nCongratulations! You are now enrolled as a participant in the study.\n\nYour next task is to complete the Wave 1 Online Survey Set within 10 days. Instructions will follow soon.\n\nBest,\nPAS 2.0 Team"
+        "body": "Hi {username},\n\nCongratulations! You are now enrolled as a participant in the study.\n\nYour next task is to complete the Wave 1 Online Survey Set within 10 days. Instructions will follow soon.\n\nBest,\nThe Confident Moves Research Team"
     },
     {
         "name": "wave1_monitor_ready",
@@ -28,7 +28,7 @@ EMAIL_TEMPLATES = [
             "After 10 days, this task will expire (i.e., no Amazon gift card for this task).\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) "
             "at svu23@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\nThe Obesity and Physical Activity Research Team"
+            "Sincerely,\nThe Confident Moves Research Team"
         )
     },
         {
@@ -42,7 +42,7 @@ EMAIL_TEMPLATES = [
                 'To earn $35 in Amazon gift cards, please wear the monitor for at least 4 days, including one weekend day, with at least 10 hours each day. '
                 'For the following seven days, complete the daily log at the end of each day. You will receive your total incentives after the study ends.\n\n'
                 'If you need any assistance, contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n'
-                'Sincerely,\nThe Obesity and Physical Activity Research Team'
+                'Sincerely,\nThe Confident Moves Research Team'
             )
         },
         {
@@ -56,7 +56,7 @@ EMAIL_TEMPLATES = [
                 '   Please click the following link to complete the task: {survey_link}\n\n'
                 '2. Please return the monitor. Within a couple of days, research members will contact you to arrange the return.\n\n'
                 'If you need any assistance, contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n'
-                'Sincerely,\nThe Obesity and Physical Activity Research Team'
+                'Sincerely,\nThe Confident Moves Research Team'
             )
         },
         {
@@ -69,14 +69,14 @@ EMAIL_TEMPLATES = [
                 'However, you will still have more tasks in the future and can continue participating in the study.\n\n'
                 'We will contact you via email for upcoming tasks, so please regularly check your inbox.\n\n'
                 'If you need any assistance or have questions, please contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n'
-                'Sincerely,\nThe Obesity and Physical Activity Research Team'
+                'Sincerely,\nThe Confident Moves Research Team'
             )
         },
 
     {
         "name": "intervention_access_later",
         "subject": "Intervention Access Later",
-        "body": "Dear {username},\n\nYou have been assigned to Group 0. You will receive intervention access later.\nBest,\nPAS 2.0 Team"
+        "body": "Dear {username},\n\nYou have been assigned to Group 0. You will receive intervention access later.\nBest,\nThe Confident Moves Research Team"
         # "body": "Dear {participant_id},\n\nYou have been assigned to Group 0. You will receive intervention access later.\nBest,\nPAS 2.0 Team"
     },
     {
@@ -96,7 +96,7 @@ EMAIL_TEMPLATES = [
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee "
             "(Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n\n"
-            "The Obesity and Physical Activity Research Team"
+            "The Confident Moves Research Team"
     )
     },
     {
@@ -109,7 +109,7 @@ EMAIL_TEMPLATES = [
             "· Please click the following link to complete the task: {survey_link}\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n"
-            "The Obesity and Physical Activity Research Team"
+            "The Confident Moves Research Team"
         )
     },
         {
@@ -121,7 +121,7 @@ EMAIL_TEMPLATES = [
             "We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n"
-            "The Obesity and Physical Activity Research Team"
+            "The Confident Moves Research Team"
         )
     },
 
@@ -135,23 +135,23 @@ EMAIL_TEMPLATES = [
             "· Please click the following link to complete the task: {survey_link}\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n"
-            "The Obesity and Physical Activity Research Team"
+            "The Confident Moves Research Team"
         )
     },
     {
         "name": "wave3_monitoring_ready",
         "subject": "Wave 3 Physical Activity Monitoring – Ready",
-        "body": "Dear {username},\n\nIt’s time for the final monitoring period. Please wear the device for 7 days.\n\nBest,\nPAS 2.0 Team"
+        "body": "Dear {username},\n\nIt’s time for the final monitoring period. Please wear the device for 7 days.\n\nBest,\nThe Confident Moves Research Team"
     },
     {
         "name": "wave3_code_entry",
         "subject": "Physical Activity Monitoring Tomorrow (Wave 3)",
-        "body": "Dear {username},\n\nStarting tomorrow ({start_date}), please wear the device for 7 days until ({end_date}).\n\nBest,\nPAS 2.0 Team"
+        "body": "Dear {username},\n\nStarting tomorrow ({start_date}), please wear the device for 7 days until ({end_date}).\n\nBest,\nThe Confident Moves Research Team"
     },
     {
         "name": "wave3_survey_monitor_return",
         "subject": "Survey by Today & Return Monitor (Study End)",
-        "body": "Dear {username},\n\nPlease complete a short survey and return the monitor by today.\n\nBest,\nPAS 2.0 Team"
+            "body": "Dear {username},\n\nPlease complete a short survey and return the monitor by today.\n\nBest,\nThe Confident Moves Research Team"
     },
     {
         "name": "wave3_missing_code",
@@ -164,7 +164,7 @@ EMAIL_TEMPLATES = [
             "If you were assigned to Group 0, you will now receive access to the intervention. "
             "Please check your email for intervention access instructions.\n\n"
             "If you need any assistance or have questions, please contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\nThe Obesity and Physical Activity Research Team"
+            "Sincerely,\nThe Confident Moves Research Team"
         )
     },
     {
@@ -180,7 +180,7 @@ EMAIL_TEMPLATES = [
             "If you were assigned to Group 0, you will now receive access to the intervention. "
             "Please check your email for intervention access instructions.\n\n"
             "If you need any assistance or have questions, please contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\nThe Obesity and Physical Activity Research Team"
+            "Sincerely,\nThe Confident Moves Research Team"
         )
     },
 ]
