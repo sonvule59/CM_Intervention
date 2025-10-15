@@ -71,11 +71,20 @@ def daily_timeline_check(user):
 
     # Info 9 – Day 1: Wave 1 Online Survey Ready
     if today and today == 1 and participant.email_status != 'sent_wave1_survey':
-        participant.send_email("wave1_survey_ready")
+        participant.send_email("wave1_survey_ready", mark_as='sent_wave1_survey')
 
-    # Info 10 – Day 11: Wave 1 Monitor Ready
-    if today and today == 11 and not participant.code_entry_date and participant.email_status != 'sent_wave1_monitor':
-        participant.send_email("wave1_monitor_ready")
+    # Info 10 – Day 8: Wave 1 Physical Activity Monitoring – Ready
+    # Send at 7 AM CT in real-time mode; in time-compression, send immediately when day==8
+    if today and today == 8 and not participant.code_entry_date and participant.email_status != 'sent_wave1_monitor':
+        if not settings.TIME_COMPRESSION:
+            # Enforce 7 AM Central Time (CT) for real-time mode
+            from pytz import timezone as tz
+            ct = tz('US/Central')
+            now_ct = timezone.now().astimezone(ct)
+            if now_ct.hour == 7:
+                participant.send_email("wave1_monitor_ready", mark_as='sent_wave1_monitor')
+        else:
+            participant.send_email("wave1_monitor_ready", mark_as='sent_wave1_monitor')
 
     # Info 14 – Day 21: Missed Wave 1 Code Entry
     if today and today == 21 and not participant.code_entered and participant.email_status != 'sent_wave1_missing':

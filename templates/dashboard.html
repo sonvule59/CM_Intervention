@@ -326,6 +326,29 @@
                 </div>
             </div>
 
+            <!-- Wave 1 Online Survey (Days 1-7) -->
+            {% if show_wave1_survey %}
+                <div class="card">
+                    <div class="alert alert-success">
+                        <h3>🎉 Wave 1 Online Survey</h3>
+                        <p><strong>Hi {{ participant.participant_id }},</strong></p>
+                        <p>Congratulations! You are now enrolled as a participant in the study.</p>
+                        <p>Please click the button below to complete your task, Survey 1, within 7 days to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.participant_id }}</strong></p>
+                        
+                        {% if wave1_survey_content %}
+                            <div style="margin: 1rem 0;">
+                                {{ wave1_survey_content.content|safe }}
+                            </div>
+                        {% else %}
+                            <p><strong>Link:</strong> TBD</p>
+                        {% endif %}
+                        
+                        <p style="margin-top: 1rem;">If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:svu23@iastate.edu">svu23@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
+                        <p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>
+                    </div>
+                </div>
+            {% endif %}
+
             <!-- Intervention Access Buttons -->
             <div class="card">
                 <div class="alert alert-info">
@@ -343,8 +366,8 @@
                     <div class="card">
                         <div class="alert alert-info">
                             <h3>📱 Wave 1 Physical Activity Code Entry</h3>
-                            <p>You will receive a code to wear the physical activity monitor when you get the device.</p>
-                            <p>Please enter the code below:</p>
+                            <p>You need to enter a code on the website within 14 days to complete the physical activity monitoring. The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.</p>
+                            <p>• Please enter the code:</p>
                             <form method="POST" action="{% url 'enter_code' wave=1 %}">
                                 {% csrf_token %}
                                 <div class="form-group">
@@ -359,18 +382,22 @@
                             <p style="margin-top: 1rem; font-style: italic; color: #666;">If you need any assistance, contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.</p>
                         </div>
                     </div>
-                {% elif study_day < 11 %}
+                {% elif study_day < 8 %}
                     <div class="card">
                         <div class="alert alert-warning">
                             <h3>⏳ Wave 1 Code Entry</h3>
                             <p>Wave 1 code entry opens on <strong>{{ start_date_wave1 }}</strong> ({{ days_until_start_wave1 }} days from today).</p>
                         </div>
                     </div>
-                {% elif study_day > 20 or participant.code_entered %}
+                {% elif study_day > 21 or participant.code_entered %}
                     <div class="card">
                         <div class="alert alert-secondary">
                             <h3>✅ Wave 1 Code Entry</h3>
-                            <p>The Wave 1 code entry period has ended.</p>
+                            {% if participant.code_entered %}
+                                <p>Code entry completed on {{ participant.code_entry_date|date:"Y-m-d" }}.</p>
+                            {% else %}
+                                <p>The Wave 1 code entry period has ended.</p>
+                            {% endif %}
                         </div>
                     </div>
                 {% endif %}

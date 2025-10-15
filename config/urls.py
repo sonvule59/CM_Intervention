@@ -112,7 +112,7 @@ urlpatterns = [
     path('intervention/yoga/challenge-35/', views.yoga_challenge_35, name='yoga_challenge_35'),
     path('intervention/challenge-1/', views.intervention_challenge_1, name='intervention_challenge_1'),
     path('intervention/update-points/', views.update_intervention_points, name='update_intervention_points'),
-    path('dev/time-controls/', views.dev_time_controls, name='dev_time_controls'),
+    # path('dev/time-controls/', views.dev_time_controls, name='dev_time_controls'),
     
     # Surveys (Information 9, 18, 20)
     path('survey/wave<int:wave>/', views.survey_view, name='survey'),

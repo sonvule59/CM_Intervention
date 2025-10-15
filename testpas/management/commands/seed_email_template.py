@@ -12,23 +12,22 @@ EMAIL_TEMPLATES = [
     {
         "name": "wave1_survey_ready",
         "subject": "Wave 1 Online Survey Set – Ready",
-        "body": "Hi {username},\n\nCongratulations! You are now enrolled as a participant in the study.\n\nYour next task is to complete the Wave 1 Online Survey Set within 10 days. Instructions will follow soon.\n\nBest,\nThe Confident Moves Research Team"
+        "body": "Hi {username},\n\nCongratulations! You are now enrolled as a participant in the study.\n\nPlease click the button below to complete your task, Survey 1, within 7 days to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: {participant_id}\n\n· Link: TBD\n\nIf you need any assistance or have any questions at any time, please contact Seungmin (\"Seung\") Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\nSincerely,\n\nThe Confident Moves Research Team"
     },
     {
         "name": "wave1_monitor_ready",
         "subject": "Wave 1 Physical Activity Monitoring – Ready",
         "body": (
-            # "Hi {participant_id},\n\n"
-            "Hi {username},\n\n"
-            "Your next task is to complete Wave 1 Physical Activity Monitoring.\n\n"
-            "You need to meet with research members within 10 days to complete the physical activity monitoring. "
-            "Within the next few days, research members will contact you to provide a physical activity monitor and instructions for wearing it. "
-            "You will earn an additional $35 in your Amazon electronic gift card account for completing this task. "
-            "You will receive the accrued incentives after this study ends. "
-            "After 10 days, this task will expire (i.e., no Amazon gift card for this task).\n\n"
+            "Hi {participant_id},\n\n"
+            "Your next task is to complete Wave 1 Physical Activity Monitoring.\n"
+            "You need to enter a code on the website within 14 days to complete the physical activity monitoring. "
+            "The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.\n"
+            "You will earn an additional $25 in your Amazon electronic gift card account for completing this task. "
+            "You will receive the accrued incentives after this study ends. After 14 days, this task will expire (i.e., no Amazon gift card for this task).\n\n"
             "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) "
             "at svu23@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\nThe Confident Moves Research Team"
+            "Sincerely,\n\n"
+            "The Confident Moves Research Team"
         )
     },
         {

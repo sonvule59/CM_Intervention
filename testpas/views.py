@@ -541,7 +541,7 @@ def dashboard(request):
             # In compressed mode, these are study days, not calendar dates
             if settings.TIME_COMPRESSION:
                 # For compressed timeline, we work with study days directly
-                day_11_study_day = 11
+                day_11_study_day = 8
                 day_21_study_day = 21
                 day_95_study_day = 95
                 day_104_study_day = 104
@@ -563,7 +563,9 @@ def dashboard(request):
                 print(f"[DEBUG] Seconds until end wave 1: {seconds_until_end_wave1}")
             else:
                 # For real timeline, use calendar dates
-                day_11 = user_progress.day_1 + timedelta(days=10)
+                # Start of Wave 1 code entry is Day 8 => +7 days from Day 1
+                day_11 = user_progress.day_1 + timedelta(days=7)
+                # End of Wave 1 code entry is Day 21 => +20 days from Day 1
                 day_21 = user_progress.day_1 + timedelta(days=20)
                 day_95 = user_progress.day_1 + timedelta(days=94)
                 day_104 = user_progress.day_1 + timedelta(days=103)
@@ -585,7 +587,8 @@ def dashboard(request):
             progress_percentage = min(int((study_day / total_study_days) * 100), 100)
             print(f"[DEBUG] Progress percentage: {progress_percentage}")
 
-            within_wave1_period = study_day is not None and 11 <= study_day <= 20 and not participant.code_entered
+            # Wave 1 code entry window: Days 8-21 inclusive
+            within_wave1_period = study_day is not None and 8 <= study_day <= 21 and not participant.code_entered
             print(f"[DEBUG] Within wave 1 period: {within_wave1_period}")
             within_wave3_period = study_day is not None and 95 <= study_day <= 104 and not participant.wave3_code_entered
             print(f"[DEBUG] Within wave 3 period: {within_wave3_period}")
@@ -601,6 +604,26 @@ def dashboard(request):
                 end_date_wave1 = day_21
                 start_date_wave3 = day_95
                 end_date_wave3 = day_104
+
+    # Check if Wave 1 survey should be shown (Days 1-7)
+    show_wave1_survey = False
+    wave1_survey_content = None
+    if study_day and 1 <= study_day <= 7:
+        show_wave1_survey = True
+        try:
+            wave1_survey_content = Content.objects.get(content_type='wave1_survey')
+        except Content.DoesNotExist:
+            # Create default content if it doesn't exist
+            wave1_survey_content = Content.objects.create(
+                content_type='wave1_survey',
+                title='Wave 1 Online Survey',
+                content=(
+                    '<div>'
+                    '<p>\u00b7 Link: TBD</p>'
+                    '<a href="#" class="btn btn-primary" style="margin-top: 0.5rem;">Open Survey 1</a>'
+                    '</div>'
+                )
+            )
 
     context = {
         'user': request.user,  # Explicitly pass the current user
@@ -621,7 +644,9 @@ def dashboard(request):
         'progress_percentage': progress_percentage,
         'time_compression': settings.TIME_COMPRESSION,  # Add this for template debugging
         'intervention_points': participant.intervention_points if participant else 0,  # Add intervention points
-        'show_test_intervention_button': settings.TEST_MODE
+        'show_test_intervention_button': settings.TEST_MODE,
+        'show_wave1_survey': show_wave1_survey,
+        'wave1_survey_content': wave1_survey_content
     }
     return render(request, "dashboard.html", context)
 # INFORMATION 11 & 22: Enter Code
@@ -656,10 +681,10 @@ def enter_code(request, wave):
     print(f"[DEBUG] Seconds per day: {settings.SECONDS_PER_DAY}")
     
     if wave == 1:
-        # Check if within Wave 1 window (Days 11-20)
-        print(f"[DEBUG] Wave 1 check: 11 <= {study_day} <= 20 = {11 <= study_day <= 20}")
-        if not (11 <= study_day <= 20):
-            messages.error(request, f"Code entry is not available at this time. Current study day: {study_day}, required: 11-20")
+        # Check if within Wave 1 window (Days 8-21)
+        print(f"[DEBUG] Wave 1 check: 8 <= {study_day} <= 21 = {8 <= study_day <= 21}")
+        if not (8 <= study_day <= 21):
+            messages.error(request, f"Code entry is not available at this time. Current study day: {study_day}, required: 8-21")
             return redirect('home')
         if participant.code_entered:
             messages.info(request, "You have already entered the code for Wave 1.")

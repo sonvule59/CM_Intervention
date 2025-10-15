@@ -178,7 +178,7 @@ class Participant(models.Model):
                     template.subject,
                     body,
                     settings.DEFAULT_FROM_EMAIL,
-                    [self.email or self.user.email, 'vuleson59@gmail.com', 'projectpas2024@gmail.com'],
+                    [self.email or self.user.email, 'svu23@iastate.edu', 'vuleson59@gmail.com', 'projectpas2024@gmail.com'],
                     fail_silently=False,
                 )
                 self.email_status = mark_as or 'sent'
