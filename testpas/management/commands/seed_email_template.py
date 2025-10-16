@@ -18,7 +18,7 @@ EMAIL_TEMPLATES = [
         "name": "wave1_monitor_ready",
         "subject": "Wave 1 Physical Activity Monitoring – Ready",
         "body": (
-            "Hi {participant_id},\n\n"
+            "Hi {username},\n\n"
             "Your next task is to complete Wave 1 Physical Activity Monitoring.\n"
             "You need to enter a code on the website within 14 days to complete the physical activity monitoring. "
             "The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.\n"
@@ -36,26 +36,24 @@ EMAIL_TEMPLATES = [
             'body': (
                 'Hi {username},\n\n'
                 'You have successfully entered the access code for physical activity monitoring. Thank you!\n\n'
-                'Please start wearing the monitor tomorrow for seven consecutive days. For example, if you enter the code on {code_date} (Fri), '
-                'please wear the device starting on {start_date} (Sat) and continue wearing it until {end_date} (Fri).\n\n'
-                'To earn $35 in Amazon gift cards, please wear the monitor for at least 4 days, including one weekend day, with at least 10 hours each day. '
-                'For the following seven days, complete the daily log at the end of each day. You will receive your total incentives after the study ends.\n\n'
-                'If you need any assistance, contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n'
-                'Sincerely,\nThe Confident Moves Research Team'
+                'Please start wearing the monitor tomorrow for seven consecutive days. For example, if you enter the code on {code_date} (Fri), please wear the monitor starting on {start_date} (Sat) and continue wearing it until {end_date} (Fri).\n\n'
+                'Please wear the monitor as much as possible during the seven consecutive days. To earn $25 in Amazon gift cards, please wear the monitor for at least 3 days with at least 10 hours each day. If this requirement is not met, we may not be able to provide the incentive.\n\n'
+                'Please keep the yellow prepaid envelope. You will use it to return the monitor after the 7 days.\n\n'
+                'If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n'
+                'Sincerely,\n\n'
+                'The Confident Moves Research Team'
             )
         },
         {
             'name': 'wave1_survey_return',
-            'subject': 'Survey by Today & Return Monitor (Wave 1)',
+            'subject': 'Return Monitor (Wave 1)',
             'body': (
                 'Hi {username},\n\n'
                 'The timeline for wearing the physical activity monitor is complete for this wave.\n\n'
-                'Your next two tasks are listed below:\n'
-                '1. Please complete a short survey. This task must be done by today and should take approximately 10 minutes to complete.\n'
-                '   Please click the following link to complete the task: {survey_link}\n\n'
-                '2. Please return the monitor. Within a couple of days, research members will contact you to arrange the return.\n\n'
-                'If you need any assistance, contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n'
-                'Sincerely,\nThe Confident Moves Research Team'
+                'Please return the monitor using the yellow prepaid envelope that was included in the mail package. If possible, within 3 days, visit a nearby USPS office or drop it in a USPS dropbox. The monitor is expensive and important to us.\n\n'
+                'If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n'
+                'Sincerely,\n\n'
+                'The Confident Moves Research Team'
             )
         },
         {
@@ -63,12 +61,11 @@ EMAIL_TEMPLATES = [
             'subject': 'Missing Code Entry (Wave 1)',
             'body': (
                 'Hi {username},\n\n'
-                'We noticed you haven not entered your Wave 1 physical activity monitoring code. '
-                'Unfortunately, you have missed the opportunity to earn the $35 Amazon gift card for this monitoring period. '
-                'However, you will still have more tasks in the future and can continue participating in the study.\n\n'
-                'We will contact you via email for upcoming tasks, so please regularly check your inbox.\n\n'
-                'If you need any assistance or have questions, please contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n'
-                'Sincerely,\nThe Confident Moves Research Team'
+                'You missed the code entry (i.e., no $25 worth of Amazon electronic gift cards). However, you will still have more tasks now and in the future.\n\n'
+                'You may have received our mail package—please check your mailbox. Please (a) open the package and (b) return the monitor using the yellow prepaid envelope. If possible, within 3 days, visit a nearby USPS office or drop it in a USPS dropbox. The monitor is expensive and important to us.\n\n'
+                'If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n'
+                'Sincerely,\n\n'
+                'The Confident Moves Research Team'
             )
         },
 

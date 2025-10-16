@@ -86,17 +86,17 @@ def daily_timeline_check(user):
         else:
             participant.send_email("wave1_monitor_ready", mark_as='sent_wave1_monitor')
 
-    # Info 14 – Day 21: Missed Wave 1 Code Entry
-    if today and today == 21 and not participant.code_entered and participant.email_status != 'sent_wave1_missing':
+    # Info 14 – Day 22: Missing Code Entry (Wave 1)
+    if today and today == 22 and not participant.code_entered and participant.email_status != 'sent_wave1_missing':
         participant.send_email("wave1_missing_code")
         participant.email_status = 'sent_wave1_missing'
         participant.save()
 
-    # Info 13 – 8 days after code entry: Survey & Return Monitor
+    # Info 13 – 7 days after code entry: Return Monitor (Wave 1)
     if participant.code_entry_day is not None:
         code_day = participant.code_entry_day  # Use stored timeline day directly
-        if today == code_day + 8 and participant.email_status != 'sent_wave1_survey_return':
-            print(f"[SEND] Info 13 to user {user.id}")
+        if today == code_day + 7 and participant.email_status != 'sent_wave1_survey_return':
+            print(f"[SEND] Info 13 (Return Monitor) to user {user.id}")
             participant.send_email("wave1_survey_return")
             participant.email_status = 'sent_wave1_survey_return'
             participant.save()
