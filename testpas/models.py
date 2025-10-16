@@ -122,6 +122,13 @@ class Participant(models.Model):
     group_assigned = models.BooleanField(default=False)
     intervention_start_date = models.DateTimeField(null=True, blank=True)
     intervention_end_date = models.DateTimeField(null=True, blank=True)
+    
+    ############ 2-Block Randomization fields ################
+    ####### NEW DOUBLE BLIND RANDOMIZATION MECHANICS######## 
+    # October 16, 2025 #########################################
+    randomization_pair_id = models.IntegerField(null=True, blank=True, help_text="Pair ID for 2-block randomization (1, 2, 3, etc.)")
+    randomization_position = models.IntegerField(null=True, blank=True, choices=[(1, 'First in pair'), (2, 'Second in pair')], help_text="Position within the randomization pair")
+    randomization_completed = models.BooleanField(default=False, help_text="Whether 2-block randomization has been completed")
     engagement_tracked = models.BooleanField(default=False)
     email = models.EmailField(null=True, blank=True)  
     wave1_survey_email_sent = models.BooleanField(default=False)
@@ -376,6 +383,8 @@ class Content(models.Model):
         ('consent_form', 'Consent Form Content'),
         ('eligibility_interest', 'Eligibility Interest Page'),
         ('home_page', 'Home Page Content'),
+        ('wave1_survey', 'Wave 1 Survey Content'),
+        ('information_16', 'Information 16 - Control Group Message'),
     ]
     
     content_type = models.CharField(max_length=50, choices=CONTENT_TYPES, unique=True)

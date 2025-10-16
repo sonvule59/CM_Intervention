@@ -349,6 +349,21 @@
                 </div>
             {% endif %}
 
+            <!-- Information 16 - Control Group Message (Days 29-56) -->
+            {% if show_information_16 %}
+                <div class="card">
+                    <div class="alert alert-info">
+                        <h3>📋 Study Information</h3>
+                        {% if information_16_content %}
+                            {{ information_16_content.content|safe }}
+                        {% else %}
+                            <p>You are in the control group and will not have access to the intervention during the study period.</p>
+                            <p>Please continue with your regular activities and check back for future study tasks.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
             <!-- Intervention Access Buttons -->
             <div class="card">
                 <div class="alert alert-info">

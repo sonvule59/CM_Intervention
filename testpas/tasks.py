@@ -114,27 +114,120 @@ def daily_timeline_check(user):
 
     	Group 1 (i.e., the intervention group) will be given the access to the intervention from Day 29 to Day 56. We will track their engagement with the intervention (e.g., the number of challenges completed) from Group 1.
     """
-    # Info 15 – Day 29: Randomization
-    # On Day 29, randomize participants into Group 0 (control) or Group 1 (intervention) if not already randomized.
-    if today and 29 <= today <= 30 and participant.randomized_group is None:
-        import random
-        group = random.choice([0, 1])
-        participant.randomized_group = group
-        participant.group = group  # Also set the group field for consistency
-        participant.group_assigned = True  # Mark as assigned
-        participant.save()
-        print(f"[RANDOMIZE] User {user.id} assigned to Group {group}")
+    # # Info 15 – Day 29: Randomization
+    # # On Day 29, randomize participants into Group 0 (control) or Group 1 (intervention) if not already randomized.
+    # if today and 29 <= today <= 30 and participant.randomized_group is None:
+    #     import random
+    #     group = random.choice([0, 1])
+    #     participant.randomized_group = group
+    #     participant.group = group  # Also set the group field for consistency
+    #     participant.group_assigned = True  # Mark as assigned
+    #     participant.save()
+    #     print(f"[RANDOMIZE] User {user.id} assigned to Group {group}")
 
-        if participant.randomized_group == 0:
-            participant.send_email("intervention_access_later", extra_context={
-                "username": user.username
-            })
-        elif participant.randomized_group == 1:
-            participant.send_email("intervention_access_immediate", extra_context={
-                "username": user.username,
-                "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com" ## to be updated with the actual login page in production.
-            })
-
+    #     if participant.randomized_group == 0:
+    #         participant.send_email("intervention_access_later", extra_context={
+    #             "username": user.username
+    #         })
+    #     elif participant.randomized_group == 1:
+    #         participant.send_email("intervention_access_immediate", extra_context={
+    #             "username": user.username,
+    #             "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com" ## to be updated with the actual login page in production.
+    #         })
+    ############### NEW DOUBLE BLIND RANDOMIZATION MECHANICS STARTS HERE ######################
+    #Pair 1: TEST001 (Position 1) + TEST002 (Position 2)
+    #Pair 2: TEST003 (Position 1) + TEST004 (Position 2) #########################################
+    
+    # Info 15 – Day 29: 2-Block Randomization
+    # On Day 29, randomize participants using 2-block randomization procedure
+    if today and today == 29 and not participant.randomization_completed:
+        # Check if we need to assign this participant to a pair
+        if participant.randomization_pair_id is None:
+            # Find the next available pair or create a new one
+            last_pair = Participant.objects.filter(
+                randomization_pair_id__isnull=False
+            ).order_by('-randomization_pair_id').first()
+            
+            if last_pair is None:
+                # First participant ever
+                pair_id = 1
+                position = 1
+            else:
+                # Check if the last pair is complete (has 2 participants)
+                pair_participants = Participant.objects.filter(
+                    randomization_pair_id=last_pair.randomization_pair_id
+                ).count()
+                
+                if pair_participants < 2:
+                    # Join the existing incomplete pair
+                    pair_id = last_pair.randomization_pair_id
+                    position = 2
+                else:
+                    # Create a new pair
+                    pair_id = last_pair.randomization_pair_id + 1
+                    position = 1
+            
+            participant.randomization_pair_id = pair_id
+            participant.randomization_position = position
+            participant.save()
+        
+        # Now perform the 2-block randomization
+        pair_participants = Participant.objects.filter(
+            randomization_pair_id=participant.randomization_pair_id
+        ).order_by('id')  # Order by enrollment time (earlier ID = earlier enrollment)
+        
+        if len(pair_participants) == 2:
+            # Both participants in the pair are ready for randomization
+            import random
+            
+            # First participant (earlier enrollment) gets random assignment
+            first_participant = pair_participants[0]
+            second_participant = pair_participants[1]
+            
+            # Fair coin flip for first participant
+            first_group = random.choice([0, 1])
+            second_group = 1 - first_group  # Opposite group
+            
+            # Assign groups
+            first_participant.randomized_group = first_group
+            first_participant.group = first_group
+            first_participant.group_assigned = True
+            first_participant.randomization_completed = True
+            first_participant.save()
+            
+            second_participant.randomized_group = second_group
+            second_participant.group = second_group
+            second_participant.group_assigned = True
+            second_participant.randomization_completed = True
+            second_participant.save()
+            
+            print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id}: "
+                  f"First participant (ID {first_participant.id}) -> Group {first_group}, "
+                  f"Second participant (ID {second_participant.id}) -> Group {second_group}")
+            
+            # Send notification emails
+            if first_participant.randomized_group == 0:
+                first_participant.send_email("intervention_access_later", extra_context={
+                    "username": first_participant.user.username
+                })
+            elif first_participant.randomized_group == 1:
+                first_participant.send_email("intervention_access_immediate", extra_context={
+                    "username": first_participant.user.username,
+                    "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                })
+            
+            if second_participant.randomized_group == 0:
+                second_participant.send_email("intervention_access_later", extra_context={
+                    "username": second_participant.user.username
+                })
+            elif second_participant.randomized_group == 1:
+                second_participant.send_email("intervention_access_immediate", extra_context={
+                    "username": second_participant.user.username,
+                    "login_link": settings.LOGIN_URL if hasattr(settings, "LOGIN_URL") else "https://your-login-page.com"
+                })
+        else:
+            print(f"[2-BLOCK RANDOMIZE] Pair {participant.randomization_pair_id} waiting for second participant")
+    ############### NEW DOUBLE BLIND RANDOMIZATION MECHANICS ENDS HERE ######################
     """
     Information 18: Day 57: Wave 2 Survey Ready
     (Email) Wave 2 Online Survey Set – Ready. On Day 57, send this email to every participant from any group.  

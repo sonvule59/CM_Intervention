@@ -625,6 +625,27 @@ def dashboard(request):
                 )
             )
 
+    # Check if Information 16 should be shown for Group 0 (Days 29-56)
+    show_information_16 = False
+    information_16_content = None
+    if (study_day and 29 <= study_day <= 56 and 
+        participant and participant.randomized_group == 0):
+        show_information_16 = True
+        try:
+            information_16_content = Content.objects.get(content_type='information_16')
+        except Content.DoesNotExist:
+            # Create default content if it doesn't exist
+            information_16_content = Content.objects.create(
+                content_type='information_16',
+                title='Information 16 - Control Group Message',
+                content=(
+                    '<div>'
+                    '<p>You are in the control group and will not have access to the intervention during the study period.</p>'
+                    '<p>Please continue with your regular activities and check back for future study tasks.</p>'
+                    '</div>'
+                )
+            )
+
     context = {
         'user': request.user,  # Explicitly pass the current user
         'progress': user_progress,
@@ -646,7 +667,9 @@ def dashboard(request):
         'intervention_points': participant.intervention_points if participant else 0,  # Add intervention points
         'show_test_intervention_button': settings.TEST_MODE,
         'show_wave1_survey': show_wave1_survey,
-        'wave1_survey_content': wave1_survey_content
+        'wave1_survey_content': wave1_survey_content,
+        'show_information_16': show_information_16,
+        'information_16_content': information_16_content
     }
     return render(request, "dashboard.html", context)
 # INFORMATION 11 & 22: Enter Code
@@ -879,16 +902,19 @@ def intervention_access(request):
                     participant.save()
             else:
                 access_message = "Your intervention access period has ended (Days 29-56)."
-        elif participant.randomized_group == 0:  # Control group
-            if study_day > 112:
-                has_access = True
-                access_message = "You now have access to the intervention after study completion."
-                if not participant.intervention_access_granted:
-                    participant.intervention_access_granted = True
-                    participant.intervention_access_date = get_current_time()
-                    participant.save()
-            else:
-                access_message = "You will receive intervention access after Day 113 (study completion)."
+        # elif participant.randomized_group == 0:  # Control group
+        #     if study_day > 112:
+        #         has_access = True
+        #         access_message = "You now have access to the intervention after study completion."
+        #         if not participant.intervention_access_granted:
+        #             participant.intervention_access_granted = True
+        #             participant.intervention_access_date = get_current_time()
+        #             participant.save()
+        #     else:
+        #         access_message = "You will receive intervention access after Day 113 (study completion)."
+        elif participant.randomized_group == 0:  # Control group - NO ACCESS
+            has_access = False
+            access_message = "You are in the control group and do not have access to the intervention during the study period."
         else:
             access_message = "You have not been assigned to a group yet."
         

@@ -68,20 +68,18 @@ EMAIL_TEMPLATES = [
                 'The Confident Moves Research Team'
             )
         },
-
+        {
+            "name": "intervention_access_later",
+            "subject": "Group Assignment - Control Group",
+            "body": "Dear {username},\n\nYou have been assigned to Group 0 (control group). You will not have access to the intervention during the study period.\n\nPlease continue with your regular activities and check back for future study tasks.\n\nBest,\nThe Confident Moves Research Team"
+        },
     {
-        "name": "intervention_access_later",
-        "subject": "Intervention Access Later",
-        "body": "Dear {username},\n\nYou have been assigned to Group 0. You will receive intervention access later.\nBest,\nThe Confident Moves Research Team"
-        # "body": "Dear {participant_id},\n\nYou have been assigned to Group 0. You will receive intervention access later.\nBest,\nPAS 2.0 Team"
-    },
-    {
-        "name": "intervention_access_immediate",
-        "subject": "Intervention Access Immediately",
+        "name": "intervention_access_immediate",  # NEW DOUBLE BLIND RANDOMIZATION MECHANICS
+        "subject": "Group Assignment - Intervention Group", # NEW DOUBLE BLIND RANDOMIZATION MECHANICS
         "body": (
             "Hi {username},\n\n"
-            "Your access to the online physical activity intervention will begin immediately. "
-            "You may access the online physical activity intervention whenever you wish throughout approximately 4 weeks.\n\n"
+            "You have been assigned to Group 1 (intervention group). Your access to the online physical activity intervention will begin immediately."
+            "You may access the online physical activity intervention whenever you wish throughout approximately 4 weeks (Days 29-56).\n\n"
             "· Please log in from the following website: (***Login link placeholder, will be updated in production***)\n"
             "· Your ID is: {username}. If you forgot your password, you may reset it on the website.\n\n"
             "If you complete at least 24 post-introductory challenges during the 4 weeks, you will earn an additional $20 "
@@ -89,11 +87,10 @@ EMAIL_TEMPLATES = [
             "may take approximately 2 hours. You will receive the accrued incentives after this study ends.\n\n"
             "We will also email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). "
             "Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
-            "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee "
-            "(Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
+            "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n\n"
             "The Confident Moves Research Team"
-    )
+        )
     },
     {
         "name": "wave2_survey_ready",
