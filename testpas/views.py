@@ -347,7 +347,7 @@ def send_wave_1_email(user):
 """Information 6: (Website) IRB Consent Form
 Participants should be able to access the IRB consent form on the website."""
 @login_required
-def consent_form(request):
+def consent_form(request, survey_id=None):
     if request.method == "POST":
         logger.debug(f"Consent form POST data for {request.user.username}: {dict(request.POST)}")
         

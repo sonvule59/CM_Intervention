@@ -45,6 +45,7 @@ urlpatterns = [
     
     # Information 6: Consent Form
     path('questionnaire/consent/', views.consent_form, name='consent_form'),
+    path('questionnaire/consent/<int:survey_id>/', views.consent_form, name='consent_form_with_survey'),
     # path('consent/download/', views.download_consent, name='download_consent'),
     
     # Information 7: Exit Screens
