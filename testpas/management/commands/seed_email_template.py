@@ -70,7 +70,7 @@ EMAIL_TEMPLATES = [
         },
     {
         "name": "intervention_access_later",
-        "subject": "Intervention Access Later",
+        "subject": "Intervention Access Later - Next Task in Approximately 4 Weeks",
         "body": "Hi {username},\n\nWe recommend that you maintain your usual daily routines. We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\nIf you need any assistance or have any questions at any time, please contact Seungmin (\"Seung\") Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\nSincerely,\n\nThe Confident Moves Research Team"
     },
     {
@@ -87,7 +87,7 @@ EMAIL_TEMPLATES = [
             "may take approximately 2 hours. You will receive the accrued incentives after this study ends.\n\n"
             "We will also email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). "
             "Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
-            "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
+            "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
