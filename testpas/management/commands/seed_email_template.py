@@ -68,11 +68,11 @@ EMAIL_TEMPLATES = [
                 'The Confident Moves Research Team'
             )
         },
-        {
-            "name": "intervention_access_later",
-            "subject": "Group Assignment - Control Group",
-            "body": "Dear {username},\n\nYou have been assigned to Group 0 (control group). You will not have access to the intervention during the study period.\n\nPlease continue with your regular activities and check back for future study tasks.\n\nBest,\nThe Confident Moves Research Team"
-        },
+    {
+        "name": "intervention_access_later",
+        "subject": "Intervention Access Later",
+        "body": "Hi {username},\n\nWe recommend that you maintain your usual daily routines. We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\nIf you need any assistance or have any questions at any time, please contact Seungmin (\"Seung\") Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\nSincerely,\n\nThe Confident Moves Research Team"
+    },
     {
         "name": "intervention_access_immediate",  # NEW DOUBLE BLIND RANDOMIZATION MECHANICS
         "subject": "Group Assignment - Intervention Group", # NEW DOUBLE BLIND RANDOMIZATION MECHANICS

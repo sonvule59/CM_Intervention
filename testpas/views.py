@@ -640,8 +640,9 @@ def dashboard(request):
                 title='Information 16 - Control Group Message',
                 content=(
                     '<div>'
-                    '<p>You are in the control group and will not have access to the intervention during the study period.</p>'
-                    '<p>Please continue with your regular activities and check back for future study tasks.</p>'
+                    '<p>We recommend that you maintain your usual daily routines. We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>'
+                    '<p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>'
+                    '<p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>'
                     '</div>'
                 )
             )
@@ -1500,10 +1501,8 @@ def intervention_access_test(request):
         if not user_progress or not user_progress.consent_given:
             messages.error(request, "You must complete enrollment before accessing the intervention.")
             return redirect('dashboard')
-        
         has_access = True
         access_message = "TEST MODE: Intervention access granted for testing purposes."
-        
         from .models import ChallengeCompletion
         challenges_completed = ChallengeCompletion.objects.filter(user=request.user).count()
         total_challenges = 35
