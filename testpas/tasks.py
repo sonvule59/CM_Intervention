@@ -260,10 +260,10 @@ def daily_timeline_check(user):
         participant.save()
 
     """
-    Information 20: Day 85: Wave 3 Survey Ready
-    (Email) Wave 3 Online Survey Set – Ready. On Day 85, send this email to every participant from any group.  
+    Information 21: Day 113: Wave 3 Survey Ready
+    (Email) Wave 3 Online Survey Set – Ready. On Day 113, send this email to every participant from any group.  
     """
-    if today and 85 <= today <= 86 and not participant.wave3_survey_email_sent:
+    if today and today == 113 and not participant.wave3_survey_email_sent:
         participant.send_email(
             "wave3_survey_ready", 
             extra_context={
@@ -272,10 +272,10 @@ def daily_timeline_check(user):
         participant.save()
 
     """
-    Information 21: Day 95: Wave 3 Monitoring Ready
-    (Email) Wave 3 Physical Activity Monitoring Ready. On Day 95, send this email to every participant from any group.  
+    Information 23: Day 120: Wave 3 Monitoring Ready
+    (Email) Wave 3 Physical Activity Monitoring Ready. On Day 120, send this email to every participant from any group.  
     """
-    if today and today == 95 and not participant.wave3_monitor_ready_sent:
+    if today and today == 120 and not participant.wave3_monitor_ready_sent:
         participant.send_email("wave3_monitoring_ready", extra_context={"username": user.username})
         participant.wave3_monitor_ready_sent = True
         participant.save()

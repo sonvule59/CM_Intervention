@@ -384,7 +384,10 @@ class Content(models.Model):
         ('eligibility_interest', 'Eligibility Interest Page'),
         ('home_page', 'Home Page Content'),
         ('wave1_survey', 'Wave 1 Survey Content'),
+        ('wave2_survey', 'Wave 2 Survey Content'),
+        ('wave3_survey', 'Wave 3 Survey Content'),
         ('information_16', 'Information 16 - Control Group Message'),
+        ('information_20', 'Information 20 - No Wave 2 Physical Activity Monitoring'),
     ]
     
     content_type = models.CharField(max_length=50, choices=CONTENT_TYPES, unique=True)

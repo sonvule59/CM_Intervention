@@ -97,15 +97,15 @@ EMAIL_TEMPLATES = [
         "subject": "Wave 2 Online Survey Set – Ready",
         "body": (
             "Hi {username},\n\n"
-            "Your next task is to complete the Wave 2 Online Survey Set within 10 days. You will earn $5 in your Amazon electronic gift card account for completing this task. "
-            "You will receive the accrued incentives after this study ends. After 10 days, this task will expire (i.e., no Amazon gift card for this task).\n"
-            "· Please click the following link to complete the task: {survey_link}\n\n"
-            "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
+            "Your next task is to complete the Wave 2 Online Survey Set within 7 days. You will earn $5 in your Amazon electronic gift card account for completing this task. "
+            "You will receive the accrued incentives after this study ends. After 7 days, this task will expire (i.e., no Amazon gift card for this task).\n"
+            "· Link: TBD\n\n"
+            "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n"
             "The Confident Moves Research Team"
         )
     },
-        {
+    {
         "name": "wave2_no_monitoring",
         "subject": "No Wave 2 Physical Activity Monitoring",
         "body": (
@@ -123,10 +123,10 @@ EMAIL_TEMPLATES = [
         "subject": "Wave 3 Online Survey Set – Ready",
         "body": (
             "Hi {username},\n\n"
-            "Your next task is to complete the Wave 3 Online Survey Set within 10 days. You will earn $5 in your Amazon electronic gift card account for completing this task. "
-            "You will receive the accrued incentives after this study ends. After 10 days, this task will expire (i.e., no Amazon gift card for this task).\n"
-            "· Please click the following link to complete the task: {survey_link}\n\n"
-            "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at svu23@iastate.edu or 517-898-0020.\n\n"
+            "Your next task is to complete the Wave 3 Online Survey Set within 7 days. You will earn $5 in your Amazon electronic gift card account for completing this task. "
+            "You will receive the accrued incentives after this study ends. After 7 days, this task will expire (i.e., no Amazon gift card for this task).\n"
+            "· Link: TBD\n\n"
+            "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n"
             "The Confident Moves Research Team"
         )
@@ -134,7 +134,15 @@ EMAIL_TEMPLATES = [
     {
         "name": "wave3_monitoring_ready",
         "subject": "Wave 3 Physical Activity Monitoring – Ready",
-        "body": "Dear {username},\n\nIt’s time for the final monitoring period. Please wear the device for 7 days.\n\nBest,\nThe Confident Moves Research Team"
+        "body": (
+            "Hi {username},\n\n"
+            "Your next task is to complete Wave 3 Physical Activity Monitoring.\n"
+            "You need to enter a code on the website within 14 days to complete the physical activity monitoring. The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.\n"
+            "You will earn an additional $30 in your Amazon electronic gift card account for completing this task. You will receive the accrued incentives after this study ends. After 14 days, this task will expire (i.e., no Amazon gift card for this task).\n\n"
+            "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
+            "Sincerely,\n"
+            "The Confident Moves Research Team"
+        )
     },
     {
         "name": "wave3_code_entry",

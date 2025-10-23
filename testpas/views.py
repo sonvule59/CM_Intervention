@@ -521,6 +521,8 @@ def dashboard(request):
     day_21 = None
     day_95 = None
     day_104 = None
+    day_120 = None
+    day_133 = None
     
     # Use compressed timeline calculation consistently
     if user_progress and user_progress.eligible and user_progress.consent_given and participant:
@@ -569,16 +571,20 @@ def dashboard(request):
                 day_21 = user_progress.day_1 + timedelta(days=20)
                 day_95 = user_progress.day_1 + timedelta(days=94)
                 day_104 = user_progress.day_1 + timedelta(days=103)
+                day_120 = user_progress.day_1 + timedelta(days=119)
+                day_133 = user_progress.day_1 + timedelta(days=132)
                 
                 days_until_start_wave1 = max(0, (day_11 - current_date).days)
                 days_until_end_wave1 = max(0, (day_21 - current_date).days)
-                days_until_start_wave3 = max(0, (day_95 - current_date).days)
-                days_until_end_wave3 = max(0, (day_104 - current_date).days)
+                days_until_start_wave3 = max(0, (day_120 - current_date).days)
+                days_until_end_wave3 = max(0, (day_133 - current_date).days)
                 
             print(f"[DEBUG] Day 11: {day_11}")
             print(f"[DEBUG] Day 21: {day_21}")
             print(f"[DEBUG] Day 95: {day_95}")
             print(f"[DEBUG] Day 104: {day_104}")
+            print(f"[DEBUG] Day 120: {day_120}")
+            print(f"[DEBUG] Day 133: {day_133}")
             print(f"[DEBUG] Days until start wave 1: {days_until_start_wave1}")
             print(f"[DEBUG] Days until end wave 1: {days_until_end_wave1}")
 
@@ -590,20 +596,21 @@ def dashboard(request):
             # Wave 1 code entry window: Days 8-21 inclusive
             within_wave1_period = study_day is not None and 8 <= study_day <= 21 and not participant.code_entered
             print(f"[DEBUG] Within wave 1 period: {within_wave1_period}")
-            within_wave3_period = study_day is not None and 95 <= study_day <= 104 and not participant.wave3_code_entered
+            # within_wave3_period = study_day is not None and 95 <= study_day <= 104 and not participant.wave3_code_entered
+            within_wave3_period = study_day is not None and 120 <= study_day <= 133 and not participant.wave3_code_entered
             print(f"[DEBUG] Within wave 3 period: {within_wave3_period}")
             
             # Set display dates for template
             if settings.TIME_COMPRESSION:
                 start_date_wave1 = f"Study Day {day_11_study_day}"
                 end_date_wave1 = f"Study Day {day_21_study_day}"
-                start_date_wave3 = f"Study Day {day_95_study_day}"
-                end_date_wave3 = f"Study Day {day_104_study_day}"
+                start_date_wave3 = f"Study Day 120"
+                end_date_wave3 = f"Study Day 133"
             else:
                 start_date_wave1 = day_11
                 end_date_wave1 = day_21
-                start_date_wave3 = day_95
-                end_date_wave3 = day_104
+                start_date_wave3 = day_120
+                end_date_wave3 = day_133
 
     # Check if Wave 1 survey should be shown (Days 1-7)
     show_wave1_survey = False
@@ -647,6 +654,90 @@ def dashboard(request):
                 )
             )
 
+    # Check if Wave 2 survey should be shown (Days 57-63)
+    show_wave2_survey = False
+    wave2_survey_content = None
+    if study_day and 57 <= study_day <= 63:
+        show_wave2_survey = True
+        try:
+            wave2_survey_content = Content.objects.get(content_type='wave2_survey')
+        except Content.DoesNotExist:
+            # Create default content if it doesn't exist
+            wave2_survey_content = Content.objects.create(
+                content_type='wave2_survey',
+                title='Wave 2 Online Survey',
+                content=(
+                    '<div>'
+                    '<p>· Link: TBD</p>'
+                    '<a href="#" class="btn btn-primary" style="margin-top: 0.5rem;">Open Survey 2</a>'
+                    '</div>'
+                )
+            )
+
+    # Wave 2 Status Tracking
+    wave2_survey_status = "Not Available"
+    wave2_survey_completed = False
+    
+    if study_day:
+        if study_day < 57:
+            wave2_survey_status = "Not Yet Available"
+        elif 57 <= study_day <= 63:
+            # Check if participant has completed Wave 2 survey
+            # For now, we'll assume it's not completed (can be enhanced later with actual completion tracking)
+            wave2_survey_status = "Available - Complete within 7 days"
+        elif study_day > 63:
+            # Check if participant completed it during the window
+            # For now, we'll show as expired (can be enhanced with actual completion tracking)
+            wave2_survey_status = "Window Expired"
+    
+    # Wave 2 Monitoring Status (if applicable)
+    wave2_monitoring_status = "Not Applicable"
+    if study_day and study_day >= 57:
+        # Wave 2 has no physical activity monitoring according to the requirements
+        wave2_monitoring_status = "No Monitoring Required"
+
+    # Information 20: No Wave 2 Physical Activity Monitoring (Days 64-112)
+    show_information_20 = False
+    information_20_content = None
+    if study_day and 64 <= study_day <= 112:
+        show_information_20 = True
+        try:
+            information_20_content = Content.objects.get(content_type='information_20')
+        except Content.DoesNotExist:
+            # Create default content if it doesn't exist
+            information_20_content = Content.objects.create(
+                content_type='information_20',
+                title='Information 20 - No Wave 2 Physical Activity Monitoring',
+                content=(
+                    '<div>'
+                    '<p>There is no Wave 2 Physical Activity Monitoring.</p>'
+                    '<p>We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>'
+                    '<p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:svu23@iastate.edu">svu23@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>'
+                    '<p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>'
+                    '</div>'
+                )
+            )
+
+    # Check if Wave 3 survey should be shown (Days 113-119)
+    show_wave3_survey = False
+    wave3_survey_content = None
+    if study_day and 113 <= study_day <= 119:
+        show_wave3_survey = True
+        try:
+            wave3_survey_content = Content.objects.get(content_type='wave3_survey')
+        except Content.DoesNotExist:
+            # Create default content if it doesn't exist
+            wave3_survey_content = Content.objects.create(
+                content_type='wave3_survey',
+                title='Wave 3 Online Survey',
+                content=(
+                    '<div>'
+                    '<p>· Link: TBD</p>'
+                    '<a href="#" class="btn btn-primary" style="margin-top: 0.5rem;">Open Survey 3</a>'
+                    '</div>'
+                )
+            )
+
     context = {
         'user': request.user,  # Explicitly pass the current user
         'progress': user_progress,
@@ -670,7 +761,16 @@ def dashboard(request):
         'show_wave1_survey': show_wave1_survey,
         'wave1_survey_content': wave1_survey_content,
         'show_information_16': show_information_16,
-        'information_16_content': information_16_content
+        'information_16_content': information_16_content,
+        'show_wave2_survey': show_wave2_survey,
+        'wave2_survey_content': wave2_survey_content,
+        'wave2_survey_status': wave2_survey_status,
+        'wave2_survey_completed': wave2_survey_completed,
+        'wave2_monitoring_status': wave2_monitoring_status,
+        'show_information_20': show_information_20,
+        'information_20_content': information_20_content,
+        'show_wave3_survey': show_wave3_survey,
+        'wave3_survey_content': wave3_survey_content
     }
     return render(request, "dashboard.html", context)
 # INFORMATION 11 & 22: Enter Code
@@ -715,10 +815,10 @@ def enter_code(request, wave):
             return redirect('home')
             
     elif wave == 3:
-        # Check if within Wave 3 window (Days 95-104)
-        print(f"[DEBUG] Wave 3 check: 95 <= {study_day} <= 104 = {95 <= study_day <= 104}")
-        if not (95 <= study_day <= 104):
-            messages.error(request, f"Code entry is not available at this time. Current study day: {study_day}, required: 95-104")
+        # Check if within Wave 3 window (Days 120-133)
+        print(f"[DEBUG] Wave 3 check: 120 <= {study_day} <= 133 = {120 <= study_day <= 133}")
+        if not (120 <= study_day <= 133):
+            messages.error(request, f"Code entry is not available at this time. Current study day: {study_day}, required: 120-133")
             return redirect('home')
         if participant.wave3_code_entered:
             messages.info(request, "You have already entered the code for Wave 3.")

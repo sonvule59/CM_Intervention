@@ -364,6 +364,28 @@
                 </div>
             {% endif %}
 
+            <!-- Wave 2 Online Survey (Days 57-63) -->
+            {% if show_wave2_survey %}
+                <div class="card">
+                    <div class="alert alert-success">
+                        <h3>🎉 Wave 2 Online Survey</h3>
+                        <p><strong>Hi {{ participant.participant_id }},</strong></p>
+                        <p>Please click the button below to complete your task, Survey 2, within 7 days to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.participant_id }}</strong></p>
+                        
+                        {% if wave2_survey_content %}
+                            <div style="margin: 1rem 0;">
+                                {{ wave2_survey_content.content|safe }}
+                            </div>
+                        {% else %}
+                            <p><strong>Link:</strong> TBD</p>
+                        {% endif %}
+                        
+                        <p style="margin-top: 1rem;">If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
+                        <p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>
+                    </div>
+                </div>
+            {% endif %}
+
             <!-- Intervention Access Buttons -->
             <div class="card">
                 <div class="alert alert-info">
@@ -418,14 +440,84 @@
                 {% endif %}
             {% endif %}
 
+            <!-- Wave 2 Survey Status -->
+            {% if progress.day_1 %}
+                {% if wave2_survey_status == 'Available - Complete within 7 days' %}
+                    <div class="card">
+                        <div class="alert alert-success">
+                            <h3>📋 Wave 2 Online Survey</h3>
+                            <p>Your Wave 2 survey is now available! Complete it within 7 days to receive a $5 Amazon gift card.</p>
+                            <p><strong>Status:</strong> {{ wave2_survey_status }}</p>
+                            <p><strong>Your ID:</strong> {{ participant.participant_id }}</p>
+                            <p><strong>Link:</strong> TBD (will be updated by researchers)</p>
+                        </div>
+                    </div>
+                {% elif wave2_survey_status == 'Not Yet Available' %}
+                    <div class="card">
+                        <div class="alert alert-warning">
+                            <h3>⏳ Wave 2 Survey</h3>
+                            <p>Wave 2 survey will be available starting on Day 57.</p>
+                            <p><strong>Status:</strong> {{ wave2_survey_status }}</p>
+                        </div>
+                    </div>
+                {% elif wave2_survey_status == 'Window Expired' %}
+                    <div class="card">
+                        <div class="alert alert-secondary">
+                            <h3>✅ Wave 2 Survey</h3>
+                            <p>Wave 2 survey window has ended.</p>
+                            <p><strong>Status:</strong> {{ wave2_survey_status }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <!-- Information 20 - No Wave 2 Physical Activity Monitoring (Days 64-112) -->
+            {% if show_information_20 %}
+                <div class="card">
+                    <div class="alert alert-info">
+                        <h3>📋 Study Information</h3>
+                        {% if information_20_content %}
+                            {{ information_20_content.content|safe }}
+                        {% else %}
+                            <p>There is no Wave 2 Physical Activity Monitoring.</p>
+                            <p>We will email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). Please regularly check your inbox. You will receive the accrued incentives after this study ends.</p>
+                            <p>If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:svu23@iastate.edu">svu23@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
+                            <p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Wave 3 Online Survey (Days 113-119) -->
+            {% if show_wave3_survey %}
+                <div class="card">
+                    <div class="alert alert-success">
+                        <h3>🎉 Wave 3 Online Survey</h3>
+                        <p><strong>Hi {{ participant.participant_id }},</strong></p>
+                        <p>Please click the button below to complete your task, Survey 3, within 7 days to receive a $5 Amazon gift card. We highly recommend completing it as soon as possible before the link expires. You may need to remember your ID from this website and enter it to complete the survey. Your ID is: <strong>{{ participant.participant_id }}</strong></p>
+                        
+                        {% if wave3_survey_content %}
+                            <div style="margin: 1rem 0;">
+                                {{ wave3_survey_content.content|safe }}
+                            </div>
+                        {% else %}
+                            <p><strong>Link:</strong> TBD</p>
+                        {% endif %}
+                        
+                        <p style="margin-top: 1rem;">If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
+                        <p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>
+                    </div>
+                </div>
+            {% endif %}
+
             <!-- Wave 3 Code Entry -->
             {% if progress.day_1 %}
                 {% if within_wave3_period %}
                     <div class="card">
                         <div class="alert alert-info">
                             <h3>📱 Wave 3 Physical Activity Code Entry</h3>
-                            <p>You will receive a code to wear the physical activity monitor when you get the device.</p>
-                            <p>Please enter the code below:</p>
+                            <p>You need to enter a code on the website within 14 days to complete the physical activity monitoring. The code can be found in the mail package that will arrive at your address (the one you provided) in a few days.</p>
+                            <p>Please enter the code:</p>
                             <form method="POST" action="{% url 'enter_code' wave=3 %}">
                                 {% csrf_token %}
                                 <div class="form-group">
@@ -437,17 +529,18 @@
                             {% if code_error %}
                                 <p style="color: #dc3545; margin-top: 1rem;">{{ code_error }}</p>
                             {% endif %}
-                            <p style="margin-top: 1rem; font-style: italic; color: #666;">If you need any assistance, contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.</p>
+                            <p style="margin-top: 1rem;">If you need any assistance or have any questions at any time, please contact Seungmin ("Seung") Lee (Principal Investigator) at <a href="mailto:seunglee@iastate.edu">seunglee@iastate.edu</a> or <a href="tel:517-898-0020">517-898-0020</a>.</p>
+                            <p><strong>Sincerely,</strong><br>The Confident Moves Research Team</p>
                         </div>
                     </div>
-                {% elif study_day < 95 %}
+                {% elif study_day < 120 %}
                     <div class="card">
                         <div class="alert alert-warning">
                             <h3>⏳ Wave 3 Code Entry</h3>
                             <p>Wave 3 code entry opens on <strong>{{ start_date_wave3 }}</strong> ({{ days_until_start_wave3 }} days from today).</p>
                         </div>
                     </div>
-                {% elif study_day > 104 or participant.wave3_code_entered %}
+                {% elif study_day > 133 or participant.wave3_code_entered %}
                     <div class="card">
                         <div class="alert alert-secondary">
                             <h3>✅ Wave 3 Code Entry</h3>
