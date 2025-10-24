@@ -280,8 +280,8 @@ def daily_timeline_check(user):
         participant.wave3_monitor_ready_sent = True
         participant.save()
 
-    # Info 25 – Day 105: Missed Wave 3 Code Entry
-    if today and today == 105 and not participant.wave3_code_entered and not participant.wave3_missing_code_sent:
+    # Info 27 – Day 134: Missed Wave 3 Code Entry (Study End)
+    if today and today == 134 and not participant.wave3_code_entered and not participant.wave3_missing_code_sent:
         participant.send_email("wave3_missing_code")
         participant.wave3_missing_code_sent = True
         participant.save()

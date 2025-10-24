@@ -87,7 +87,7 @@ EMAIL_TEMPLATES = [
             "may take approximately 2 hours. You will receive the accrued incentives after this study ends.\n\n"
             "We will also email you again in approximately 4 weeks for the next task (i.e., completing an online survey set). "
             "Please regularly check your inbox. You will receive the accrued incentives after this study ends.\n\n"
-            "If you need any assistance or have any questions at any time, please contact Seungmin (“Seung”) Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
+            "If you need any assistance or have any questions at any time, please contact Seungmin (\"Seung\") Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
             "Sincerely,\n\n"
             "The Confident Moves Research Team"
         )
@@ -147,25 +147,41 @@ EMAIL_TEMPLATES = [
     {
         "name": "wave3_code_entry",
         "subject": "Physical Activity Monitoring Tomorrow (Wave 3)",
-        "body": "Dear {username},\n\nStarting tomorrow ({start_date}), please wear the device for 7 days until ({end_date}).\n\nBest,\nThe Confident Moves Research Team"
+        "body": (
+            "Hi {username},\n\n"
+            "You have successfully entered the access code for physical activity monitoring. Thank you!\n\n"
+            "Please start wearing the monitor tomorrow for seven consecutive days. For example, if you enter the code on {code_date} (Fri), please wear the monitor starting on {start_date} (Sat) and continue wearing it until {end_date} (Fri).\n\n"
+            "Please wear the monitor as much as possible during the seven consecutive days. To earn $30 in Amazon gift cards, please wear the monitor for at least 3 days with at least 10 hours each day. If this requirement is not met, we may not be able to provide the incentive.\n\n"
+            "Please keep the yellow prepaid envelope. You will use it to return the monitor after the 7 days.\n\n"
+            "If you need any assistance or have any questions at any time, please contact Seungmin Lee (Principal Investigator) at seunglee@iastate.edu or 517-898-0020.\n\n"
+            "Sincerely,\n"
+            "The Confident Moves Research Team"
+        )
     },
     {
         "name": "wave3_survey_monitor_return",
-        "subject": "Survey by Today & Return Monitor (Study End)",
-            "body": "Dear {username},\n\nPlease complete a short survey and return the monitor by today.\n\nBest,\nThe Confident Moves Research Team"
+        "subject": "Return Monitor (Study End)",
+        "body": (
+            "Hi {username},\n\n"
+            "The timeline for wearing the physical activity monitor is complete for this wave.\n\n"
+            "Please return the monitor using the yellow prepaid envelope that was included in the mail package. If possible, within 3 days, visit a nearby USPS office or drop it in a USPS dropbox. The monitor is expensive and important to us.\n\n"
+            "If you complete the above tasks, no further action is required for this study.\n\n"
+            "Any funds earned on your Amazon electronic gift card account will be sent to you as soon as possible via your email. Thank you for the time you have contributed to this study!\n\n"
+            "Sincerely,\n"
+            "The Confident Moves Research Team"
+        )
     },
     {
         "name": "wave3_missing_code",
         "subject": "Missing Code Entry (Study End)",
         "body": (
             "Hi {username},\n\n"
-            "We noticed you haven't entered your Wave 3 physical activity monitoring code. "
-            "Unfortunately, you have missed the opportunity to earn the $40 Amazon gift card for this monitoring period. "
-            "The study has now concluded, and you will no longer receive further tasks.\n\n"
-            "If you were assigned to Group 0, you will now receive access to the intervention. "
-            "Please check your email for intervention access instructions.\n\n"
-            "If you need any assistance or have questions, please contact Seungmin Lee at svu23@iastate.edu or 517-898-0020.\n\n"
-            "Sincerely,\nThe Confident Moves Research Team"
+            "You missed the code entry (i.e., no $30 worth of Amazon electronic gift cards).\n\n"
+            "You may have received our mail package—please check your mailbox. Please (a) open the package and (b) return the monitor using the yellow prepaid envelope. If possible, within 3 days, visit a nearby USPS office or drop it in a USPS dropbox. The monitor is expensive and important to us.\n\n"
+            "If you complete the above tasks, no further action is required for this study.\n\n"
+            "Any funds earned on your Amazon electronic gift card account will be sent to you as soon as possible via your email. Thank you for the time you have contributed to this study!\n\n"
+            "Sincerely,\n"
+            "The Confident Moves Research Team"
         )
     },
     {
