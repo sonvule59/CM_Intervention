@@ -22,8 +22,16 @@
         .activities-section { flex: 2; }
         
         /* Character Styling */
-        .character { position: relative; width: 120px; height: 120px; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; background: #f0f0f0; border: 3px solid #667eea; }
-        .character img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; transition: all 0.5s ease; }
+        .character { position: relative; width: 320px; height: 320px; margin: 0 auto 1rem; border-radius: 50%; overflow: hidden; background: #f0f0f0; border: 3px solid #667eea; transition: all 0.5s ease; }
+        .character img { width: 100%; height: 100%; object-fit: contain; background: #fff; padding: 8px; box-sizing: border-box; border-radius: 50%; transition: all 0.5s ease; }
+        .character.activity-active { 
+            width: 380px !important; 
+            height: 380px !important; 
+            transform: scale(1.15) !important; 
+        }
+        .character.activity-active img { 
+            transform: scale(1) !important; 
+        }
         .character.level-1 img { transform: scale(1.1); }
         .character.level-2 img { transform: scale(1.05); }
         .character.level-3 img { transform: scale(1.0); }
@@ -235,6 +243,25 @@
                     <p>Click activities to help me get more active!</p>
                 </div>
                 
+                <!-- Hidden AI-generated activity images -->
+                <div style="display: none;">
+                    <img id="vacuuming" src="https://unsplash.com/photos/a-woman-using-a-vacuum-to-clean-a-couch-coxP46cg740" alt="Vacuuming">
+                    <img id="sweeping-mopping" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop&crop=center" alt="Sweeping and Mopping">
+                    <img id="dusting-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Dusting">
+                    <img id="washing-dishes-img" src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=300&fit=crop&crop=center" alt="Washing Dishes">
+                    <img id="laundry-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Laundry">
+                    <img id="making-bed-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Making the Bed">
+                    <img id="cooking-img" src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=300&fit=crop&crop=center" alt="Cooking">
+                    <img id="grocery-shopping-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Grocery Shopping">
+                    <img id="gardening-img" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300&h=300&fit=crop&crop=center" alt="Gardening">
+                    <img id="taking-trash-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Taking Out the Trash">
+                    <img id="cleaning-windows-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Cleaning Windows">
+                    <img id="decluttering-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Decluttering">
+                    <img id="pet-care-img" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300&h=300&fit=crop&crop=center" alt="Pet Care">
+                    <img id="car-washing-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Car Washing">
+                    <img id="home-maintenance-img" src="https://images.unsplash.com/photo-1581578731548-c6a0c3f2f2c0?w=300&h=300&fit=crop&crop=center" alt="Home Maintenance">
+                </div>
+                
                 <div class="activities-section">
                     <h3>Domestic Activities</h3>
                     <div class="activities-grid">
@@ -348,8 +375,53 @@
             showPointsEarned();
             animateCharacter(activity);
             
+            // Change character image to activity-specific image
+            changeCharacterImage(activity);
+            
+            // Make character bigger
+            character.classList.add('activity-active');
+            
             // Send to server
             updatePointsOnServer(10);
+            
+            // Reset character after 3 seconds
+            setTimeout(() => {
+                resetCharacter();
+            }, 3000);
+        }
+        
+        // Change character image to activity-specific image
+        function changeCharacterImage(activity) {
+            // Use placeholder images for now - you can replace these with actual AI-generated images
+            const activityImages = {
+                'vacuuming': "{% static 'domestic/vacuuming.png' %}",
+                'sweeping-mopping': "{% static 'domestic/sweeping-mopping.png' %}",
+                'dusting': "{% static 'domestic/dusting.png' %}",
+                'washing-dishes': "{% static 'domestic/washing-dishes.png' %}",
+                'laundry': "{% static 'domestic/laundry.png' %}",
+                'making-bed': "{% static 'domestic/making-bed.png' %}",
+                'cooking': "{% static 'domestic/cooking.png' %}",
+                'grocery-shopping': "{% static 'domestic/grocery-shopping.png' %}",
+                'gardening': "{% static 'domestic/gardening.png' %}",
+                'taking-trash': "{% static 'domestic/taking-trash.png' %}",
+                'cleaning-windows': "{% static 'domestic/cleaning-windows.png' %}",
+                'decluttering': "{% static 'domestic/decluttering.png' %}",
+                'pet-care': "{% static 'domestic/pet-care.png' %}",
+                'car-washing': "{% static 'domestic/car-washing.png' %}",
+                'home-maintenance': "{% static 'domestic/home-maintenance.png' %}"
+            };
+            
+            if (activityImages[activity]) {
+                characterImage.src = activityImages[activity];
+                characterImage.alt = activity;
+            }
+        }
+        
+        // Reset character to original state
+        function resetCharacter() {
+            character.classList.remove('activity-active');
+            characterImage.src = "{% static 'demo_game/images/obese_man.png' %}";
+            characterImage.alt = "Home Worker";
         }
         
         // Update points on server
