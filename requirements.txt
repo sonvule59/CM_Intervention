@@ -21,3 +21,4 @@ twilio
 redis
 sendgrid-django
 python-dotenv
+django_celery_beat
