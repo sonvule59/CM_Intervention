@@ -62,7 +62,9 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
  
 # Auto-discover tasks from installed apps
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS, related_name='tasks')
- 
+app.conf.broker_use_ssl = {
+    'ssl_cert_reqs': False  # Upstash SSL without local certs
+} 
 # Optional debug task
 @app.task(bind=True)
 def debug_task(self):
