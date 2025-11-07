@@ -23,7 +23,7 @@ from django.contrib import messages
 from testpas.settings import *
 import os
 import datetime
-from twilio.rest import Client
+
 import pytz
 from .models import Participant, SurveyProgress, Survey, UserSurveyProgress, Content
 from django.db.models import Model
