@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General Education - Challenge 4: How to do (Part 2)</title>
+    <title>General Education - Challenge 4: Review</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
         body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -13,13 +13,16 @@
         h1 { margin: 0 0 0.5rem 0; font-weight: 300; color: #333; }
         h2 { margin: 0 0 1rem 0; font-weight: 600; color: #333; }
         p { color: #444; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        .caption-toggle { display: inline-block; background: #ff6b35; color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
-        .caption { display: none; margin-top: 1rem; background: #f9f7ff; border: 1px solid #eee; border-radius: 12px; padding: 1rem; color: #333; }
+        .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
+        .review-card { background: #fff; border-radius: 16px; padding: 1.5rem; box-shadow: 0 12px 24px rgba(102, 126, 234, 0.12); position: relative; overflow: hidden; }
+        .review-card::after { content: ""; position: absolute; inset: 0; border-radius: 16px; border: 2px solid transparent; background: linear-gradient(135deg, rgba(102,126,234,0.2), rgba(118,75,162,0.2)); z-index: -1; }
+        .review-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+        .badge-row { display: flex; gap: 12px; margin-top: 1rem; flex-wrap: wrap; }
+        .badge { background: linear-gradient(135deg, #ff6b35 0%, #fdd08d 100%); color: #fff; padding: 8px 14px; border-radius: 30px; font-weight: 600; box-shadow: 0 6px 14px rgba(255, 107, 53, 0.25); display: inline-flex; align-items: center; gap: 8px; }
+        .progress-banner { margin: 1.5rem 0; padding: 1.25rem; background: #f4f8ff; border: 2px dashed #99b6ff; border-radius: 16px; display: flex; gap: 16px; align-items: center; }
+        .progress-banner span { font-size: 1.8rem; }
         .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
-        ul { margin: 0.75rem 0 0 1.2rem; }
     </style>
     <script>
         function toggleCaption() {
@@ -32,32 +35,56 @@
     <div class="container">
         <div class="card">
             <h1>General Education</h1>
-            <div class="meta">Challenge 4: How to do - Part 2</div>
-            <h2>How To Do Physical Activity (Part 2)</h2>
-            <div class="video-wrapper">
-                <iframe src="https://player.vimeo.com/video/1041378167" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="GE Challenge 4 Video"></iframe>
+            <div class="meta">Challenge 4: Review</div>
+            <h2>Mission Recap</h2>
+            <p>Please review the following information about the intervention. Collect the badges as you revisit each theme.</p>
+
+            <div class="review-grid">
+                <div class="review-card">
+                    <div class="review-icon">📘</div>
+                    <h3>What this program is</h3>
+                    <p>This intervention is a research-based online program designed to promote physical activity in adults with obesity.</p>
+                    <div class="badge-row">
+                        <span class="badge">🎓 Evidence-based</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-icon">🎯</div>
+                    <h3>What you’ll gain</h3>
+                    <p>The intervention helps you learn the benefits of activity, find motivation, understand how to be active, and overcome unique barriers.</p>
+                    <div class="badge-row">
+                        <span class="badge">💡 Motivated</span>
+                        <span class="badge">🧭 Guided</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-icon">💪</div>
+                    <h3>Why confidence matters</h3>
+                    <p>To overcome barriers, boost your belief in your ability to be active—physical activity self-efficacy. This intervention is designed to enhance it.</p>
+                    <div class="badge-row">
+                        <span class="badge">🔒 Barrier Breaker</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-icon">🛠️</div>
+                    <h3>What you will do</h3>
+                    <p>Based on theory and science, you’ll listen to lectures, make action plans, watch videos, reflect on success, and practice change techniques.</p>
+                    <div class="badge-row">
+                        <span class="badge">🎧 Engaged</span>
+                        <span class="badge">📝 Planner</span>
+                    </div>
+                </div>
             </div>
+
+            <div class="progress-banner">
+                <span>🏆</span>
+                <div>
+                    <strong>Level up:</strong> Each activity you complete strengthens your skills and grows your confidence. Keep collecting experience points as you move forward!
+                </div>
+            </div>
+
             <div class="actions">
-                <button class="caption-toggle" onclick="toggleCaption()">Show/Hide Captions</button>
                 <a class="btn" href="{% url 'intervention_access' %}">Back to Intervention Access</a>
-            </div>
-            <div id="caption" class="caption">
-                <p>This is part 2 to explain how you can increase your physical activity.</p>
-                <p>Adults with obesity may experience unique barriers to physical activity. Understanding the following barriers will help you overcome them:</p>
-                <ul>
-                    <li>Lack of knowledge: assuming that physical activity is only important for weight loss.</li>
-                    <li>Excess weight: Excess weight itself is identified as a barrier that makes movement difficult and uncomfortable.</li>
-                    <li>Poor fitness: poor physical fitness may make physical activity seem too strenuous.</li>
-                    <li>Health problems: Some adults with obesity have illnesses or medical conditions such as arthritis that prevent them from taking part in physical activity.</li>
-                    <li>Lack of enjoyment: Lack of enjoyment is often reported by adults with obesity, especially regarding high-intensity exercise.</li>
-                    <li>Weight perception: Feeling too fat is frequently reported as a barrier to physical activity.</li>
-                    <li>Being self-conscious about appearance: Feeling embarrassed about one's appearance during exercise can be a barrier.</li>
-                </ul>
-                <p>Lack of knowledge is a critical barrier to physical activity in adults with obesity. Remember that physical activity has multiple major health benefits besides weight loss, including improvements in insulin sensitivity, blood pressure, and body composition. Most adults with obesity tend to be physically active only when trying to lose weight. However, even if their weight status remains the same, physically active adults with obesity can still experience multiple major health benefits.</p>
-                <p>To overcome the barriers related to weight, fitness, health problems, weight perception, and lack of enjoyment, you should gradually increase physical activity over time. Engaging in regular, low-to-moderate-intensity activity can help mitigate the negative impact of weight status on physical activity participation. You will learn how to increase physical activity gradually with this intervention.</p>
-                <p>If you are uncertain which physical activity is good for you, try walking; it's an easy physical activity to begin and maintain as part of a physically active lifestyle. It does not require special skills, high commitment, or expensive equipment. Many studies show that walking has health benefits and a low risk of injury. Walking can be done year round and in many settings, outside or inside.</p>
-                <p>To overcome the barriers related to self-consciousness about appearance, try to find a type of physical activity or exercise that you feel comfortable doing. If you feel uncomfortable doing a particular physical activity or exercise in public, you do not have to do so. For example, if you've been told you should take up swimming but feel uncomfortable in a bathing suit, find a different physical activity such as walking that doesn't require special clothing or make you focus on your appearance.</p>
-                <p>This intervention is designed to help you overcome the barriers to physical activity. With the intervention, you can engage in health-enhancing physical activity!</p>
             </div>
         </div>
     </div>

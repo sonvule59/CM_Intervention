@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General Education - Challenge 1: Physical Activity</title>
+    <title>General Education - Challenge 1: Introduction</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
         body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -13,13 +13,20 @@
         h1 { margin: 0 0 0.5rem 0; font-weight: 300; color: #333; }
         h2 { margin: 0 0 1rem 0; font-weight: 600; color: #333; }
         p { color: #444; }
+        .commit-card { background: #fff8f2; border: 2px solid #ff9f68; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .commit-card h2 { margin-top: 0; color: #d35400; }
+        .commit-card ul { margin: 0.75rem 0 0 1.4rem; }
+        .commit-card li { margin: 0.35rem 0; }
+        .commit-button { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: #fff; padding: 12px 18px; border-radius: 30px; border: none; cursor: pointer; font-weight: 600; margin-top: 1.25rem; box-shadow: 0 6px 14px rgba(255, 107, 53, 0.25); transition: transform 0.2s ease; }
+        .commit-button:active { transform: scale(0.97); }
+        .commit-button.confirmed { background: linear-gradient(135deg, #28a745 0%, #5dd16c 100%); box-shadow: 0 6px 14px rgba(40, 167, 69, 0.25); }
+        .commit-status { margin-top: 0.75rem; font-weight: 600; color: #28a745; display: none; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
         .caption-toggle { display: inline-block; background: #ff6b35; color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
         .caption { display: none; margin-top: 1rem; background: #f9f7ff; border: 1px solid #eee; border-radius: 12px; padding: 1rem; color: #333; }
         .actions { margin-top: 1.25rem; display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
-        ul { margin: 0.75rem 0 0 1.2rem; }
     </style>
     <script>
         function toggleCaption() {
@@ -30,36 +37,52 @@
 </head>
 <body>
     <div class="container">
+        <div class="commit-card">
+            <h2>My Commitment</h2>
+            <p>I am beginning my journey with this online intervention, designed to promote physical activity in adults with obesity.</p>
+            <p>I recognize that this process may be challenging, but I am confident in my persistence, determination, and self-discipline to achieve my goals.</p>
+            <p>When I encounter obstacles, I will overcome them by:</p>
+            <ul>
+                <li>Taking a moment to refocus</li>
+                <li>Breaking tasks into smaller, manageable steps</li>
+                <li>Seeking support and collaboration when needed</li>
+                <li>Staying informed and motivated</li>
+                <li>Maintaining a positive mindset</li>
+                <li>Sharing and discussing ideas and concerns</li>
+            </ul>
+            <button id="commitButton" class="commit-button" onclick="acknowledgeCommitment()">
+                <span>✔</span> I am fully committed to actively engaging in this intervention.
+            </button>
+            <div id="commitStatus" class="commit-status">Thank you! Your commitment is noted.</div>
+        </div>
+
         <div class="card">
             <h1>General Education</h1>
-            <div class="meta">Challenge 1: Physical Activity</div>
-            <h2>What is Physical Activity</h2>
+            <div class="meta">Challenge 1: Introduction</div>
+            <h2>Welcome to the Intervention</h2>
             <div class="video-wrapper">
-                <iframe src="https://player.vimeo.com/video/1041378056" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="GE Challenge 1 Video"></iframe>
+                <iframe src="https://player.vimeo.com/video/1041378133" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="GE Challenge 1 Video"></iframe>
             </div>
             <div class="actions">
                 <button class="caption-toggle" onclick="toggleCaption()">Show/Hide Captions</button>
                 <a class="btn" href="{% url 'intervention_access' %}">Back to Intervention Access</a>
             </div>
             <div id="caption" class="caption">
-                <p>Physical activity refers to any bodily movement that increases energy expenditure above a basal level. There are different intensities of physical activity: light, moderate, and vigorous intensity.</p>
-                <ul>
-                    <li>Light-intensity physical activity refers to non-sedentary behavior (e.g., walking slowly, stretching, making the bed).</li>
-                    <li>Moderate-intensity physical activity refers to activities that require moderate physical effort and make you breathe somewhat harder than normal (e.g., walking briskly, playing doubles tennis, raking the yard).</li>
-                    <li>Vigorous-intensity physical activity refers to activities that require more challenging physical effort and make you breathe much harder than normal (e.g., running, playing basketball, carrying heavy loads upstairs repeatedly).</li>
-                </ul>
-                <p>Physical activity can be accumulated in short bouts during the day rather than performed in one long, continuous bout.</p>
-                <p>Physical activity consists of planned or unplanned activities that are part of everyday life. These are activities that an individual selects and are not normally prescribed. There are multiple domains in physical activity: work-, transport-, domestic-, and leisure-related physical activity.</p>
-                <ul>
-                    <li>Work-related refers to physical activity at your workplace or as part of your work, including paid jobs, farming, and volunteer work.</li>
-                    <li>Transport-related refers to physical activity that you do for traveling from place to place, including to places like work, stores, and movie theaters.</li>
-                    <li>Domestic-related refers to physical activity done in and around your home, like housework, gardening, yard work, and caring for your family.</li>
-                    <li>Leisure-related refers to any preferred pleasurable and enjoyable physical activity during unobligated time or free time, including playing a sport, yoga, or walking at a park.</li>
-                </ul>
-                <p>This intervention is to promote light-, moderate-, and vigorous-intensity physical activity in the work-, transport-, domestic-, and leisure-related domains. We believe that you can increase physical activity with the intervention!</p>
+                <p>Welcome! This intervention is a research-based online program to promote health-enhancing physical activity in adults who are overweight or obese. For simplicity, “adults who are overweight or obese” will be referred to as “adults with obesity” from this point forward.</p>
+                <p>This intervention is based on scientific evidence, behavioral theory, and effective behavioral change techniques to help adults with obesity: (a) learn major health benefits of physical activity, (b) motivate for physical activity, (c) understand how to be physically active, and (d) overcome their unique barriers to physical activity. The references used to develop the intervention can be provided upon request. The intervention is developed and tested by an interdisciplinary research team that includes experts in health science, computer science, art and design, theatre, etc.</p>
+                <p>We believe that you can promote physical activity with this intervention! To get you started, let's learn more about the intervention contents.</p>
             </div>
         </div>
     </div>
+
+    <script>
+        function acknowledgeCommitment() {
+            const btn = document.getElementById('commitButton');
+            const status = document.getElementById('commitStatus');
+            btn.classList.add('confirmed');
+            status.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
 

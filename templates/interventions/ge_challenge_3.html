@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General Education - Challenge 3: How to do (Part 1)</title>
+    <title>General Education - Challenge 3: Game</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
         body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -13,6 +13,11 @@
         h1 { margin: 0 0 0.5rem 0; font-weight: 300; color: #333; }
         h2 { margin: 0 0 1rem 0; font-weight: 600; color: #333; }
         p { color: #444; }
+        .game-card { background: #f4f9ff; border: 2px solid #8ab6ff; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .game-card h2 { margin-top: 0; color: #2363d1; }
+        .game-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
+        .feature { background: #fff; border-radius: 14px; padding: 1rem; box-shadow: 0 6px 16px rgba(35, 99, 209, 0.08); display: flex; gap: 12px; align-items: flex-start; }
+        .feature span { font-size: 1.4rem; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
         .caption-toggle { display: inline-block; background: #ff6b35; color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
@@ -30,23 +35,48 @@
 </head>
 <body>
     <div class="container">
+        <div class="game-card">
+            <h2>Let’s Play: The Physical Activity Game</h2>
+            <p>This challenge introduces the same interactive experience you’ll find later in Challenge 25. It’s a playful way to explore everyday movement, earn points, and celebrate your effort.</p>
+            <div class="game-features">
+                <div class="feature">
+                    <span>🎯</span>
+                    <div>
+                        <strong>Try the game now</strong>
+                        <p>Launch the Domestic Activity Game to practice making movement fun.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <span>⭐️</span>
+                    <div>
+                        <strong>Earn points</strong>
+                        <p>Each activity you select boosts your in-game progress and confidence.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <span>🎬</span>
+                    <div>
+                        <strong>Preview the experience</strong>
+                        <p>Watch the sample walkthrough below before jumping in.</p>
+                    </div>
+                </div>
+            </div>
+            <a class="btn" href="{% url 'intervention_challenge_25' %}">Open the Domestic Activity Game</a>
+        </div>
+
         <div class="card">
             <h1>General Education</h1>
-            <div class="meta">Challenge 3: How to do - Part 1</div>
-            <h2>How To Do Physical Activity (Part 1)</h2>
+            <div class="meta">Challenge 3: Game</div>
+            <h2>Game Preview</h2>
             <div class="video-wrapper">
-                <iframe src="https://player.vimeo.com/video/1041378236" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="GE Challenge 3 Video"></iframe>
+                <iframe src="https://player.vimeo.com/video/1041377561" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="GE Challenge 3 Video"></iframe>
             </div>
             <div class="actions">
                 <button class="caption-toggle" onclick="toggleCaption()">Show/Hide Captions</button>
                 <a class="btn" href="{% url 'intervention_access' %}">Back to Intervention Access</a>
             </div>
             <div id="caption" class="caption">
-                <p>This is part 1 to explain how you can increase your physical activity.</p>
-                <p>According to the Physical Activity Guidelines for Americans, each week adults need at least 150 minutes (2 hours and 30 minutes) of moderate intensity physical activity or 75 minutes (1 hour and 15 minutes) of vigorous physical activity, or an equivalent combination of moderate and vigorous intensity activity, for substantial health benefits. The focus should be an aerobic physical activity like running, but muscle-strengthening activity such as lifting weights is also helpful. Additional health benefits can be gained by engaging in physical activity beyond the recommended weekly amount.</p>
-                <p>It is important to know that all physical activity, whether light-, moderate-, or vigorous-intensity, counts. You can move more and sit less throughout the day, because any length of physical activity contributes to the health benefits. Some physical activity is better than none for your health, even a brief episode of physical activity like taking the stairs rather than the elevator or adding short walks to your day.</p>
-                <p>Start with light or moderate-intensity physical activity and gradually increase the intensity, duration, and frequency. Physical activity should be increased gradually over time regardless of your physical fitness. You shouldn’t start with high-intensity activities because they may cause injury and exhaustion. Exercising at very high intensity may result in discontinuing the activity. Working incrementally and waiting for the body to adapt and recover should reduce the risk of physical overload, mental stress, decreased motivation, and injury.</p>
-                <p>If you have low physical fitness, you may find that moderate-intensity physical activity is experienced as vigorous intensity. You can get health benefits from starting with activities that would be considered light intensity and, as you are able, gradually build up to moderate or vigorous-intensity activities. If you have chronic disease or disabilities, you need to engage in physical activity adapted for your physical conditions in consultation with your health care provider. A variety of physical activities will be introduced in this intervention. Remember to consult a health care professional about the appropriate types and amounts of physical activity that are right for you.</p>
+                <p>Watch this short example to see how the game combines everyday movement with playful feedback. Then launch the full version above and try it yourself!</p>
             </div>
         </div>
     </div>
