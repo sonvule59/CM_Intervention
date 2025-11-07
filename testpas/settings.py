@@ -120,21 +120,22 @@ TIME_COMPRESSION = True
 SECONDS_PER_DAY = 10 # Use 86400 for real-world days
 # TEST_TIME_SCALE = 10  # 1 day = 10 seconds for testing
 # TEST_TIME_SCALE = float(os.getenv('TEST_TIME_SCALE', '5'))  # 1 day = 1 second (or set to 60 for minutes)
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_TASK_TRACK_STARTED = True
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'America/Chicago'
-CELERY_ENABLE_UTC = False
-CELERY_BEAT_SCHEDULE = {
-    'run-timeline-checks': {
-        'task': 'testpas.tasks.run_daily_timeline_checks',
-        'schedule': 15.0 if TIME_COMPRESSION else 86400.0,
-    },
-}
-
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_TASK_TRACK_STARTED = True
+# # CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'America/Chicago'
+# CELERY_ENABLE_UTC = False
+# CELERY_BEAT_SCHEDULE = {
+#     'run-timeline-checks': {
+#         'task': 'testpas.tasks.run_daily_timeline_checks',
+#         'schedule': 15.0 if TIME_COMPRESSION else 86400.0,
+#     },
+# }
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 # Define how many seconds represent one simulated "day"
 
 # Email settings
