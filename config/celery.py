@@ -69,9 +69,6 @@ if redis_url:
     # a Redis result backend based on the broker URL
     # rpc:// backend doesn't require Redis, avoiding SSL configuration conflicts
     app.conf.result_backend = 'rpc://'
-    # Remove any result backend SSL configuration that might have been set
-    if hasattr(app.conf, 'redis_backend_use_ssl'):
-        delattr(app.conf, 'redis_backend_use_ssl')
     
     # Connection settings for better reliability
     app.conf.broker_connection_retry = True
