@@ -134,16 +134,19 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 15.0 if TIME_COMPRESSION else 86400.0,
     },
 }
-from celery import Celery
-import ssl
-ssl_context = ssl.create_default_context()
+# from celery import Celery
+# import ssl
+# ssl_context = ssl.create_default_context()
  
-app = Celery("config")
-app.conf.broker_transport_options = {
-    "ssl": ssl_context
-}
+# app = Celery("config")
+# app.conf.broker_transport_options = {
+#     "ssl": ssl_context
+# }
  
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+# CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+# Celery broker URL - can be overridden by REDIS_URL or CELERY_BROKER_URL env vars in celery.py
+# Render typically provides REDIS_URL, which will be used by celery.py
+CELERY_BROKER_URL = os.environ.get("REDIS_URL") or os.environ.get("CELERY_BROKER_URL")
 # CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 CELERY_RESULT_BACKEND = None
 # Define how many seconds represent one simulated "day"

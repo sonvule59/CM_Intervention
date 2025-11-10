@@ -800,8 +800,7 @@ def enter_code(request, wave):
             return redirect('home')
         if participant.code_entered:
             messages.info(request, "You have already entered the code for Wave 1.")
-            return redirect('home')
-            
+            return redirect('home')        
     elif wave == 3:
         # Check if within Wave 3 window (Days 120-133)
         print(f"[DEBUG] Wave 3 check: 120 <= {study_day} <= 133 = {120 <= study_day <= 133}")
@@ -816,7 +815,6 @@ def enter_code(request, wave):
         form = CodeEntryForm(request.POST)
         if form.is_valid():
             code = form.cleaned_data['code'].strip().lower()
-            
             # if code == settings.REGISTRATION_CODE.lower():
             if code == 'wavepa':
                 if wave == 1:
@@ -876,10 +874,8 @@ def enter_code(request, wave):
                 return render(request, "dashboard.html", { "form": form,  "code_error": "Incorrect code. Please try again.",
    # Include other context vars needed on the dashboard
 })
-                # messages.error(request, "Incorrect code. Please try again.")
     else:
         form = CodeEntryForm()
-    
     context = {
         'form': form,
         'wave': wave,
@@ -991,16 +987,6 @@ def intervention_access(request):
                     participant.save()
             else:
                 access_message = "Your intervention access period has ended (Days 29-56)."
-        # elif participant.randomized_group == 0:  # Control group
-        #     if study_day > 112:
-        #         has_access = True
-        #         access_message = "You now have access to the intervention after study completion."
-        #         if not participant.intervention_access_granted:
-        #             participant.intervention_access_granted = True
-        #             participant.intervention_access_date = get_current_time()
-        #             participant.save()
-        #     else:
-        #         access_message = "You will receive intervention access after Day 113 (study completion)."
         elif participant.randomized_group == 0:  # Control group - NO ACCESS
             has_access = False
             access_message = "You are in the control group and do not have access to the intervention during the study period."
@@ -1028,8 +1014,7 @@ def intervention_access(request):
             'remaining_challenges': remaining_challenges,
         }
         
-        return render(request, 'intervention_access.html', context)
-        
+        return render(request, 'intervention_access.html', context)  
     except Participant.DoesNotExist:
         messages.error(request, "Participant record not found.")
         return redirect('dashboard')
