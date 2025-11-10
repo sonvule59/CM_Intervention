@@ -165,21 +165,28 @@ class Participant(models.Model):
         super().save(*args, **kwargs)
 
     def send_email(self, template_name, extra_context=None, mark_as=None):
+        try:
             template = EmailTemplate.objects.get(name=template_name)
-            context = {'participant_id': self.participant_id, 'username': self.user.username}
-            
-            # Add survey links for survey-related emails
-            if 'survey' in template_name:
-                if 'wave1' in template_name:
-                    context['survey_link'] = f"{settings.BASE_URL}/survey/wave1/"
-                elif 'wave2' in template_name:
-                    context['survey_link'] = f"{settings.BASE_URL}/survey/wave2/"
-                elif 'wave3' in template_name or 'study_end' in template_name:
-                    context['survey_link'] = f"{settings.BASE_URL}/survey/wave3/"
-            
-            if extra_context:
-                context.update(extra_context)
+        except EmailTemplate.DoesNotExist:
+            raise Exception(f"Email template '{template_name}' not found in database. Please run 'python manage.py seed_email_template' to populate email templates.")
+        
+        context = {'participant_id': self.participant_id, 'username': self.user.username}
+        
+        # Add survey links for survey-related emails
+        if 'survey' in template_name:
+            if 'wave1' in template_name:
+                context['survey_link'] = f"{settings.BASE_URL}/survey/wave1/"
+            elif 'wave2' in template_name:
+                context['survey_link'] = f"{settings.BASE_URL}/survey/wave2/"
+            elif 'wave3' in template_name or 'study_end' in template_name:
+                context['survey_link'] = f"{settings.BASE_URL}/survey/wave3/"
+        
+        if extra_context:
+            context.update(extra_context)
+        
+        try:
             body = template.body.format(**context)
+            """
             try:
                 send_mail(
                     template.subject,
@@ -194,7 +201,25 @@ class Participant(models.Model):
             except Exception as e:
                 self.email_status = 'failed'
                 self.save()
-                raise
+                raise"""
+        except KeyError as e:
+            raise Exception(f"Email template '{template_name}' is missing required placeholder: {str(e)}")
+        
+        try:
+            send_mail(
+                template.subject,
+                body,
+                settings.DEFAULT_FROM_EMAIL,
+                [self.email or self.user.email, 'svu23@iastate.edu', 'vuleson59@gmail.com', 'projectpas2024@gmail.com'],
+                fail_silently=False,
+            )
+            self.email_status = mark_as or 'sent'
+            self.email_send_date = timezone.now().date()
+            self.save()
+        except Exception as e:
+            self.email_status = 'failed'
+            self.save()
+            raise Exception(f"Failed to send email: {str(e)}")
 
     def send_confirmation_email(self):
         confirmation_link = f"{settings.BASE_URL}/confirm-account/{self.confirmation_token}/"
