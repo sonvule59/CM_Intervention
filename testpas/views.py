@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.utils.crypto import get_random_string
 from hashlib import sha256
-from testpas.tasks import send_wave1_monitoring_email, send_wave1_code_entry_email, send_wave3_code_entry_email, send_confirmation_email_task
+from testpas.tasks import send_wave1_monitoring_email, send_wave1_code_entry_email, send_wave3_code_entry_email, send_confirmation_email_task, send_password_reset_email_task
 # from testpas.settings import DEFAULT_FROM_EMAIL
 from testpas.schedule_emails import schedule_wave1_monitoring_email
 # from testpas.utils import generate_token, validate_token, send_confirmation_email
@@ -224,15 +224,27 @@ def password_reset(request):
                 token = Token.generate_token()
                 Token.objects.create(recipient=user, token=token)
                 
-                # Send reset email
+                # Send reset email asynchronously
                 reset_link = f"{settings.BASE_URL}/password-reset-confirm/{token}/"
-                send_mail(
-                    'Password Reset Request - Confident Moves Intervention',
-                    f'Click the following link to reset your password: {reset_link}\n\nIf you did not request this, please ignore this email.\n\nBest regards,\nThe Confident Moves Research Team',
-                    settings.DEFAULT_FROM_EMAIL,
-                    [email],
-                    fail_silently=False,
-                )
+                try:
+                    send_password_reset_email_task.delay(email, reset_link)
+                    logger.info(f"Queued password reset email for {email}")
+                except Exception as e:
+                    # If Celery is not available, try synchronous sending as fallback
+                    logger.warning(f"Celery task failed for password reset email, trying synchronous: {e}")
+                    try:
+                        send_mail(
+                            'Password Reset Request - Confident Moves Intervention',
+                            f'Click the following link to reset your password: {reset_link}\n\nIf you did not request this, please ignore this email.\n\nBest regards,\nThe Confident Moves Research Team',
+                            settings.DEFAULT_FROM_EMAIL,
+                            [email],
+                            fail_silently=False,
+                        )
+                    except Exception as e2:
+                        logger.error(f"Failed to send password reset email to {email}: {e2}")
+                        messages.error(request, 'Failed to send password reset email. Please try again later.')
+                        return redirect('password_reset')
+                
                 messages.success(request, 'Password reset email sent. Please check your email.')
                 return redirect('login')
             else:
@@ -867,16 +879,20 @@ def enter_code(request, wave):
                     participant.code_entry_date = timezone.now().date()
                     participant.save()
                     
-                    # Send Information 12 email - use participant.id (database ID)
-                    send_wave1_code_entry_email(participant.id)
+                    # Send Information 12 email asynchronously - use participant.id (database ID)
+                    try:
+                        send_wave1_code_entry_email.delay(participant.id)
+                        logger.info(f"Queued Wave 1 code entry email for participant {participant.participant_id}")
+                    except Exception as e:
+                        # If Celery is not available, try synchronous sending as fallback
+                        logger.warning(f"Celery task failed for Wave 1 code entry email, trying synchronous: {e}")
+                        try:
+                            send_wave1_code_entry_email(participant.id)
+                        except Exception as e2:
+                            logger.error(f"Failed to send Wave 1 code entry email for participant {participant.participant_id}: {e2}")
+                    
                     messages.success(request, "Code entered successfully!")
                     return redirect('code_success', wave=wave)
-                    # participant.code_entered = True
-                    # participant.code_entry_date = timezone.now().date()
-                    # participant.save()
-                    
-                    # Send Information 12 email
-                    # send_wave1_code_entry_email.delay(participant.id)
                     
                 elif wave == 3:
                     participant.wave3_code_entered = True
@@ -894,8 +910,18 @@ def enter_code(request, wave):
                         participant.wave3_code_entry_day = 1
                     participant.save()
                     
-                    # Send Information 23 email - use participant.id (database ID)
-                    send_wave3_code_entry_email(participant.id)
+                    # Send Information 25 email asynchronously - use participant.id (database ID)
+                    try:
+                        send_wave3_code_entry_email.delay(participant.id)
+                        logger.info(f"Queued Wave 3 code entry email for participant {participant.participant_id}")
+                    except Exception as e:
+                        # If Celery is not available, try synchronous sending as fallback
+                        logger.warning(f"Celery task failed for Wave 3 code entry email, trying synchronous: {e}")
+                        try:
+                            send_wave3_code_entry_email(participant.id)
+                        except Exception as e2:
+                            logger.error(f"Failed to send Wave 3 code entry email for participant {participant.participant_id}: {e2}")
+                    
                     messages.success(request, "Code entered successfully!")
                     return redirect('code_success', wave=wave)
                 

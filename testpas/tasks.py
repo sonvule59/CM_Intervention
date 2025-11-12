@@ -308,6 +308,21 @@ def send_confirmation_email_task(participant_id):
         logger.error(f"Error sending confirmation email for participant {participant_id}: {str(e)}")
 
 @shared_task
+def send_password_reset_email_task(email, reset_link):
+    """Send password reset email asynchronously"""
+    try:
+        send_mail(
+            'Password Reset Request - Confident Moves Intervention',
+            f'Click the following link to reset your password: {reset_link}\n\nIf you did not request this, please ignore this email.\n\nBest regards,\nThe Confident Moves Research Team',
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,
+        )
+        logger.info(f"Sent password reset email to {email}")
+    except Exception as e:
+        logger.error(f"Error sending password reset email to {email}: {str(e)}")
+
+@shared_task
 def send_wave1_survey_return_email(participant_id):
     """Information 13: Survey by Today & Return Monitor (Wave 1)"""
     try:
