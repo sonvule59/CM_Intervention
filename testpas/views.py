@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.utils.crypto import get_random_string
 from hashlib import sha256
-from testpas.tasks import send_wave1_monitoring_email, send_wave1_code_entry_email, send_wave3_code_entry_email
+from testpas.tasks import send_wave1_monitoring_email, send_wave1_code_entry_email, send_wave3_code_entry_email, send_confirmation_email_task
 # from testpas.settings import DEFAULT_FROM_EMAIL
 from testpas.schedule_emails import schedule_wave1_monitoring_email
 # from testpas.utils import generate_token, validate_token, send_confirmation_email
@@ -82,21 +82,20 @@ def create_account(request):
                         enrollment_date=timezone.now().date(),
                         is_confirmed=False
                     )
+                    # Send confirmation email asynchronously using Celery
+                    # This prevents account creation from hanging on email sending
                     try:
-                        # Use send_confirmation_email to avoid auth issues
-                        participant.send_confirmation_email()
+                        send_confirmation_email_task.delay(participant.id)
+                        logger.info(f"Queued confirmation email for participant {participant.participant_id}")
                     except Exception as e:
-                        logger.error(f"Failed to send account_confirmation email for participant {participant.participant_id}: {e}")
-                        # Don't fail account creation if email fails - log it and continue
-                        # This allows the account to be created even if email service is down
-                        if is_ajax:
-                            return JsonResponse({
-                                'status': 'success',
-                                'message': 'Account created. Note: Confirmation email could not be sent. Please contact support.',
-                                'redirect': '/'
-                            })
-                        messages.warning(request, "Account created, but confirmation email could not be sent. Please contact support.")
-                        return redirect("landing")
+                        # If Celery is not available, try synchronous sending as fallback
+                        logger.warning(f"Celery task failed, trying synchronous email: {e}")
+                        try:
+                            participant.send_confirmation_email()
+                        except Exception as e2:
+                            logger.error(f"Failed to send account_confirmation email for participant {participant.participant_id}: {e2}")
+                            # Don't fail account creation if email fails - log it and continue
+                            # This allows the account to be created even if email service is down
                     
                     # Handle AJAX
                     if is_ajax:

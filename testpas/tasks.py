@@ -296,6 +296,18 @@ def daily_timeline_check(user):
         participant.save()
 
 @shared_task
+def send_confirmation_email_task(participant_id):
+    """Send account confirmation email asynchronously"""
+    try:
+        participant = Participant.objects.get(id=participant_id)
+        participant.send_confirmation_email()
+        logger.info(f"Sent confirmation email to {participant.email}")
+    except Participant.DoesNotExist:
+        logger.error(f"Participant {participant_id} not found for confirmation email")
+    except Exception as e:
+        logger.error(f"Error sending confirmation email for participant {participant_id}: {str(e)}")
+
+@shared_task
 def send_wave1_survey_return_email(participant_id):
     """Information 13: Survey by Today & Return Monitor (Wave 1)"""
     try:

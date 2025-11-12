@@ -186,22 +186,6 @@ class Participant(models.Model):
         
         try:
             body = template.body.format(**context)
-            """
-            try:
-                send_mail(
-                    template.subject,
-                    body,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [self.email or self.user.email, 'svu23@iastate.edu', 'vuleson59@gmail.com', 'projectpas2024@gmail.com'],
-                    fail_silently=False,
-                )
-                self.email_status = mark_as or 'sent'
-                self.email_send_date = timezone.now().date()
-                self.save()
-            except Exception as e:
-                self.email_status = 'failed'
-                self.save()
-                raise"""
         except KeyError as e:
             raise Exception(f"Email template '{template_name}' is missing required placeholder: {str(e)}")
         
