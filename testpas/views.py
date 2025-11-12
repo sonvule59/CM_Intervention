@@ -326,9 +326,13 @@ def questionnaire(request):
         )
         print(f"Eligibility Result: {eligible}")
 
-        survey = Survey.objects.first()
-        if not survey:
-            return JsonResponse({"error": "No survey available. Contact support."}, status=500)
+        # Get or create the Eligibility Criteria survey
+        survey, created = Survey.objects.get_or_create(
+            title="Eligibility Criteria",
+            defaults={"description": "Survey to determine participant eligibility"}
+        )
+        if created:
+            logger.info("Created Eligibility Criteria survey automatically")
         
         # Save participant information including dominant hand
         try:
