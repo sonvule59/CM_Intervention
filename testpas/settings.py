@@ -24,13 +24,15 @@ import os
 
 # Use DATABASE_URL if provided (Render PostgreSQL), else default to SQLite
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}",
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'cm_intervention',  
+        'USER': 'cm_intervention_user',  
+        'PASSWORD': 'J4g5pu8Tvd8zo9tL3qIrS6W9lfhvAFNg',  
+        'HOST': 'dpg-d46kcdmuk2gs73882790-a.ohio-postgres.render.com', 
+        'PORT': '5432',
+    }
 }
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env()
