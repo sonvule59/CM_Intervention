@@ -1,0 +1,62 @@
+services:
+  # --- Django Web App ---
+  - type: web
+    name: testpas-web
+    env: python
+    plan: starter
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate
+      python manage.py collectstatic --noinput
+      python manage.py seed_email_template
+      python manage.py seed_eligibility_survey
+    startCommand: gunicorn config.wsgi:application --log-file -
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: testpas.settings
+      - key: REDIS_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: BASE_URL
+        value: https://cm-intervention.onrender.com
+
+  # --- Celery Worker ---
+  - type: worker
+    name: testpas-celery-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A config.celery worker --loglevel=info
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: testpas.settings
+      - key: REDIS_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+
+  # --- Celery Beat (scheduler, optional) ---
+  - type: worker
+    name: testpas-celery-beat
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A config.celery beat --loglevel=info
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: testpas.settings
+      - key: REDIS_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false

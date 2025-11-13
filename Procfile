@@ -1,7 +1,11 @@
-# # web: gunicorn config.wsgi --log-file - 
-# web: gunicorn --chdir testpas testpas.wsgi
-web: gunicorn testpas:app
-# web: gunicorn config.wsgi
+# Start the Django web app
 web: gunicorn config.wsgi --log-file -
+
+# Run migrations before each deploy
 release: python manage.py migrate
-worker: celery worker --app=tasks.app
+
+# Start the Celery worker
+worker: celery -A testpas.celery worker --loglevel=info
+
+# Start Celery Beat for scheduled tasks
+beat: celery -A testpas.celery beat --loglevel=info
