@@ -21,3 +21,4 @@ redis
 sendgrid-django
 python-dotenv
 django_celery_beat
+psycopg[binary]
