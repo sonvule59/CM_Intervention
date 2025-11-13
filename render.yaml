@@ -8,6 +8,8 @@ services:
       pip install -r requirements.txt
       python manage.py migrate
       python manage.py collectstatic --noinput
+    preDeployCommand: |
+      python manage.py migrate
       python manage.py seed_email_template
       python manage.py seed_eligibility_survey
     startCommand: gunicorn config.wsgi:application --log-file -
