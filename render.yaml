@@ -10,7 +10,6 @@ services:
       python manage.py collectstatic --noinput
     preDeployCommand: |
       python manage.py migrate
-      python manage.py seed_email_template
     startCommand: gunicorn config.wsgi:application --log-file -
     envVars:
       - key: DJANGO_SETTINGS_MODULE
