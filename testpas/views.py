@@ -91,9 +91,13 @@ def create_account(request):
                         # If Celery is not available, try synchronous sending as fallback
                         logger.warning(f"Celery task failed, trying synchronous email: {e}")
                         try:
+                            logger.info(f"Sending confirmation email synchronously for participant {participant.participant_id}")
                             participant.send_confirmation_email()
+                            logger.info(f"Successfully sent confirmation email to {participant.email}")
                         except Exception as e2:
                             logger.error(f"Failed to send account_confirmation email for participant {participant.participant_id}: {e2}")
+                            import traceback
+                            logger.error(f"Traceback: {traceback.format_exc()}")
                             # Don't fail account creation if email fails - log it and continue
                             # This allows the account to be created even if email service is down
                     
