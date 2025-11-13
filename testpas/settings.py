@@ -113,8 +113,6 @@ TEMPLATES = [
     },
 ]
 
-from celery.schedules import crontab
-
 #Time settings
 USE_TZ = True
 TIME_ZONE = 'America/Chicago'
@@ -155,7 +153,7 @@ CELERY_BEAT_SCHEDULE = {
 # Render typically provides REDIS_URL, which will be used by celery.py
 CELERY_BROKER_URL = os.environ.get("REDIS_URL") or os.environ.get("CELERY_BROKER_URL")
 # CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
-CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
+CELERY_RESULT_BACKEND = None
 CELERY_TASK_IGNORE_RESULT = True
 # Define how many seconds represent one simulated "day"
 
